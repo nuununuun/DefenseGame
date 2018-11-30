@@ -190,48 +190,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &865674172
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768709035476218, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &1092406260
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 17
   height: 13
+  tile: {fileID: 1178873795189162, guid: ff1586d2590f44009b45ff9a69abbc97, type: 2}
 --- !u!4 &1092406262
 Transform:
   m_ObjectHideFlags: 0
@@ -272,5 +231,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
