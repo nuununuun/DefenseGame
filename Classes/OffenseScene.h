@@ -4,6 +4,11 @@
 #include "MainScene.h"
 #include "cocos2d.h"
 #include <vector>
+#include "OffenseUnit.h"
+
+enum {
+	TAG_TYPE_OFFENSE
+};
 
 class OffenseScene : public MainScene {
 public:
@@ -29,10 +34,11 @@ public:
 public:
 	void selectGrid(const cocos2d::Vec2 &pos);
 
-
 	cocos2d::Vec2 mouseDownPosition;
 	cocos2d::Layer *menuLayer;
 	bool isMouseDown = false;
+	void updateCoolTime(float dt);
+
 private:
 	cocos2d::Sprite *interfaceFlyingEye;
 	cocos2d::Sprite *spriteFlyingEye;
@@ -48,6 +54,18 @@ private:
 
 	cocos2d::Sprite *interfaceRib;
 	cocos2d::Sprite *spriteRib;
+
+	void addShootFire(cocos2d::Point pt);
+	void weaponRemover(Node* sender);
+	void IsCollision(float dt);
+	std::vector<OffenseUnit*> offenseUnits;
+	std::vector<cocos2d::Sprite*> weaponArr;
+	void shootFromCharacter();
+	cocos2d::Sprite *bullet;
+	cocos2d::Point mPtShoot;
+	float fireCool;
+
+	bool mIsShoot;
 };
 
 #endif

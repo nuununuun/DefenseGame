@@ -36,8 +36,15 @@ bool OffenseScene::init() {
 
 	//interfaceUnits.push_back(interfaceFlyingEye);
 	scheduleUpdate();
-
+	schedule(schedule_selector(OffenseScene::IsCollision));
+	schedule(schedule_selector(OffenseScene::updateCoolTime));
 	return true;
+}
+
+void OffenseScene::updateCoolTime(float dt)
+{
+	fireCool += dt;
+	shootFromCharacter();
 }
 
 void OffenseScene::onMouseDown(cocos2d::EventMouse *e) {
@@ -53,16 +60,27 @@ void OffenseScene::onMouseDown(cocos2d::EventMouse *e) {
 		addHeart();
 	if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView()))
 		addRib();
+
+	mPtShoot = e->getLocationInView();
+	mIsShoot = true;
+
+	isMouseDown = true;
 }
 
 void OffenseScene::onMouseUp(cocos2d::EventMouse *e) {
 	MainScene::onMouseUp(e);
-
+	mIsShoot = false;
+	isMouseDown = false;
 }
 
 void OffenseScene::onMouseMove(cocos2d::EventMouse *e) {
 	MainScene::onMouseMove(e);
 
+	if (isMouseDown)
+	{
+		mPtShoot = e->getLocationInView();
+		mIsShoot = true;
+	}
 }
 
 void OffenseScene::update(float dt) {
@@ -74,6 +92,102 @@ void OffenseScene::selectGrid(const Vec2 &pos) {
 	mapData.setTileData(gridPosition.x, gridPosition.y, TileType::BARRICADE);
 
 	updateMap();
+}
+
+void OffenseScene::addShootFire(Point pt)
+{
+	Size winSize = Director::getInstance()->getWinSize();
+	Point location = getRealPosition(Vec2(16, 6));
+
+	bullet = Sprite::create("bullet.png");
+	bullet->setPosition(location);
+	bullet->setAnchorPoint(Vec2(0, 0));
+	//	bullet->setScale(0.5f);
+
+	float angle = (float)atanf((pt.x - location.x) / (pt.y - location.y)) * (180.f / M_PI);
+	if (location.y > pt.y)
+		bullet->setRotation(angle - 180);
+	else
+		bullet->setRotation(angle);
+
+	this->addChild(bullet);
+
+	auto moveTo = MoveTo::create(0.5f, pt);
+	ActionInterval* actionInterval = EaseOut::create(moveTo, 1.8f);
+	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseScene::weaponRemover, this));
+
+	Sequence* sequence = Sequence::create(actionInterval, callfunc, NULL);
+	bullet->runAction(sequence);
+
+	weaponArr.push_back(bullet);
+}
+
+void OffenseScene::shootFromCharacter()
+{
+	if (mIsShoot == true)
+	{
+		if (fireCool >= 0.1f)
+		{
+			fireCool = 0;
+			addShootFire(mPtShoot);
+		}
+	}
+}
+
+void OffenseScene::weaponRemover(Node* sender)
+{
+	Sprite* weapon = nullptr;
+
+	for (auto iter = weaponArr.begin(); iter != weaponArr.end(); iter++)
+	{
+		weapon = *iter;
+
+		if (weapon == sender)
+		{
+			weaponArr.erase(iter);
+			break;
+		}
+
+		weapon = nullptr;
+	}
+
+	selfRemover(weapon);
+}
+
+void OffenseScene::IsCollision(float dt)
+{
+	Size winSize = Director::getInstance()->getWinSize();
+	Sprite* weapon = NULL;
+	Sprite* unit = NULL;
+
+	for (auto iter = weaponArr.begin(); iter != weaponArr.end(); iter++)
+	{
+		Sprite* w = *iter;
+		bool bHit = false;
+
+		for (auto iterE = offenseUnits.begin(); iterE != offenseUnits.end(); iterE++)
+		{
+			OffenseUnit* u = (*iterE);
+
+			if (w->getBoundingBox().intersectsRect(u->body->getBoundingBox()))
+			{
+				bHit = true;
+
+				u->curEnergy -= 1.0f;
+				if (u->curEnergy <= 0)
+				{
+					u->body->removeFromParentAndCleanup(true);
+					u = nullptr;
+					offenseUnits.erase(iterE);
+				}
+				w->removeFromParentAndCleanup(true);
+				w = nullptr;
+				weaponArr.erase(iter);
+
+				return;
+			}
+		}
+	}
 }
 
 void OffenseScene::setFirstPosition(Sprite* sprite)
@@ -137,7 +251,15 @@ void OffenseScene::addFlyingEye()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteFlyingEye->runAction(act);
-	//addUnit(spriteFlying_eye);
+
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteFlyingEye;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(2);
+
+	offenseUnits.push_back(unit);
 }
 
 void OffenseScene::addBaby()
@@ -182,7 +304,15 @@ void OffenseScene::addBaby()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteBaby->runAction(act);
-	//addUnit(spriteFlying_eye);
+	
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteBaby;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(10);
+
+	offenseUnits.push_back(unit);
 }
 
 void OffenseScene::addFinger()
@@ -227,7 +357,15 @@ void OffenseScene::addFinger()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteFinger->runAction(act);
-	//addUnit(spriteFlying_eye);
+	
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteFinger;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(2);
+
+	offenseUnits.push_back(unit);
 }
 
 void OffenseScene::addHeart()
@@ -272,7 +410,15 @@ void OffenseScene::addHeart()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteHeart->runAction(act);
-	//addUnit(spriteFlying_eye);
+	
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteHeart;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(2);
+
+	offenseUnits.push_back(unit);
 }
 
 void OffenseScene::addRib()
@@ -317,5 +463,13 @@ void OffenseScene::addRib()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteRib->runAction(act);
-	//addUnit(spriteFlying_eye);
+	
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteRib;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(2);
+
+	offenseUnits.push_back(unit);
 }
