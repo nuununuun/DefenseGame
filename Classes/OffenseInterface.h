@@ -15,16 +15,18 @@ public:
 	bool init(MainScene* parent);
 	bool isContain(cocos2d::Sprite* sprite, cocos2d::Point);
 
-	void addKenny(float dt);
+	void addKenny();
+	void addJenny();
+
 	void addUnit(cocos2d::Sprite* unit);
 
 	void setFirstPosition(cocos2d::Sprite* sprite);
 	void selfRemover(cocos2d::Node* sender);
 
-	virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-	//void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-	//void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
-	//void onTouchCancelled(cocos2d::Touch* touch, cocos2d::Event* event);
+	virtual void onMouseDown(cocos2d::EventMouse *e);
+	virtual void onMouseUp(cocos2d::EventMouse *e);
+	virtual void onMouseMove(cocos2d::EventMouse *e);
+
 private:
 	std::vector<cocos2d::Sprite*> arrUnit;
 	cocos2d::Sprite* interfaceKenny;
