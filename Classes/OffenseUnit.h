@@ -9,6 +9,17 @@ enum UNIT_TYPE {
 	SELF_DESTRUCT
 };
 
+enum UNIT_COST {
+	COST_FLYING_EYE = 2,
+	COST_BABY,
+	COST_FINGER,
+	COST_HEART,
+	COST_RIB,
+	COST_TOOTH,
+	COST_CAECUM,
+	COST_FIST
+};
+
 class OffenseUnit
 {
 public:

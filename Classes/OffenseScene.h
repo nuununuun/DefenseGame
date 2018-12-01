@@ -76,6 +76,8 @@ private:
 	int coreHealth;
 	cocos2d::Sprite *hpBar_fill;
 	cocos2d::Sprite *hpBar_empty;
+
+	float money;
 };
 
 #endif

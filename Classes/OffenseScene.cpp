@@ -11,16 +11,17 @@ bool OffenseScene::init() {
 	addChild(menuLayer);
 
 	coreHealth = 100;
-	hpBar_fill = Sprite::create("res/hpBar_fill.png");
-	hpBar_fill->setGlobalZOrder(1001);
-	hpBar_empty = Sprite::create("res/hpBar_empty.png");
-	hpBar_empty->setGlobalZOrder(1001);
+	money = 20;
+	//hpBar_fill = Sprite::create("res/hpBar_fill.png");
+	//hpBar_fill->setGlobalZOrder(1001);
+	//hpBar_empty = Sprite::create("res/hpBar_empty.png");
+	//hpBar_empty->setGlobalZOrder(1001);
 
-	hpBar_fill->setPosition(Vec2(967 + 0 * 98, 118 + 4 * 98));
-	hpBar_empty->setPosition(Vec2(967 + 0 * 98, 118 + 4 * 98));
-
-	menuLayer->addChild(hpBar_empty);
-	menuLayer->addChild(hpBar_fill);
+	//hpBar_fill->setPosition(Vec2(967 + 0 * 98, 118 + 4 * 98));
+	//hpBar_empty->setPosition(Vec2(967 + 0 * 98, 118 + 4 * 98));
+	//
+	//menuLayer->addChild(hpBar_empty);
+	//menuLayer->addChild(hpBar_fill);
 
 	//sample->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (j + 1), i * 64 + 72));
 	//setPosition(Vec2(967 + j * 98, 118 + i * 98));
@@ -93,6 +94,10 @@ void OffenseScene::onConnect(SIOClient* c) {
 void OffenseScene::updateCoolTime(float dt)
 {
 	fireCool += dt;
+
+	if(money <= 50.0f)
+		money += dt;
+
 	shootFromCharacter();
 }
 
@@ -100,31 +105,74 @@ void OffenseScene::onMouseDown(cocos2d::EventMouse *e) {
 	MainScene::onMouseDown(e);
 	
     if (interfaceFlyingEye->getBoundingBox().containsPoint(e->getLocationInView())) {
+		if (money < COST_FLYING_EYE)
+			return;
+
 		addFlyingEye();
         client->emit("summon", "0");
+
+		money -= COST_FLYING_EYE;
     }
     if (interfaceBaby->getBoundingBox().containsPoint(e->getLocationInView())) {
+		if (money < COST_BABY)
+			return;
+
 		addBaby();
         client->emit("summon", "1");
+
+		money -= COST_BABY;
     }
     if (interfaceFinger->getBoundingBox().containsPoint(e->getLocationInView())) {
+		if (money < COST_FINGER)
+			return;
+
 		addFinger();
         client->emit("summon", "2");
+
+		money -= COST_FINGER;
     }
     if (interfaceHeart->getBoundingBox().containsPoint(e->getLocationInView())) {
+		if (money < COST_HEART)
+			return;
+
 		addHeart();
         client->emit("summon", "3");
+
+		money -= COST_HEART;
     }
     if (interfaceFist->getBoundingBox().containsPoint(e->getLocationInView())) {
+		if (money < COST_FIST)
+			return;
+
 		addFist();
         client->emit("summon", "4");
+
+		money -= COST_FIST;
     }
-//    if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView()))
-//        addRib();
-//    if (interfaceTooth->getBoundingBox().containsPoint(e->getLocationInView()))
-//        addTooth();
-//    if (interfaceCaecum->getBoundingBox().containsPoint(e->getLocationInView()))
-//        addCaecum();
+	if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView())) {
+		addRib();
+		client->emit("summon", "5");
+
+		money -= COST_RIB;
+	}
+	if (interfaceTooth->getBoundingBox().containsPoint(e->getLocationInView())) {
+		if (money < COST_TOOTH)
+			return;
+
+		addTooth();
+		client->emit("summon", "6");
+
+		money -= COST_TOOTH;
+	}
+	if (interfaceCaecum->getBoundingBox().containsPoint(e->getLocationInView())) {
+		if (money < COST_CAECUM)
+			return;
+
+		addCaecum();
+		client->emit("summon", "7");
+
+		money -= COST_CAECUM;
+	}
 
 
 	mPtShoot = e->getLocationInView();
@@ -299,7 +347,7 @@ void OffenseScene::selfRemover(Node* sender)
 			if (coreHealth < 0)
 				coreHealth = 0;
 
-			hpBar_fill->setScaleX(coreHealth * 0.01f);
+			//	hpBar_fill->setScaleX(coreHealth * 0.01f);
 			sender->removeFromParentAndCleanup(true);
 			u = nullptr;
 			offenseUnits.erase(iterE);
