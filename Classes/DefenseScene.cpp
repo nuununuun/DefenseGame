@@ -132,7 +132,7 @@ void DefenseScene::putTower(int dir) {
     
     auto gp = getGridPosition(towerPreview->getPosition());
     if (mapData.getTileData(gp.x, gp.y) == TileType::SETABLE) {
-        auto tower = Tower::create(dir);
+        auto tower = Tower::create(dir, Tower::ARROW);
         tower->setPosition(getRealPosition(gp));
         addChild(tower);
         int type = (int)TileType::SETABLE + 1;
@@ -186,27 +186,9 @@ void DefenseScene::update(float dt) {
     for (auto &tower : towers) {
         // check
         if (tower->attackTick >= tower->attackDelay) {
-            for (int i = 0; i < tower->range; i++) {
-                Tower::idxToDir(tower->direction);
-                auto proj = Projectile::create(5);
-                proj->setPosition(tower->getPosition());
-                proj->setGlobalZOrder(1000);
-                addChild(proj);
-            }
+            tower->act();
             tower->attackTick = 0;
         } else tower->attackTick += 1.0f * dt;
     }
     updateTime(dt);
-//    for (auto &tower : towers) {
-//        // check
-//        if () {
-//            // 따로 빼야 할지도
-//            if (tower->attackTick >= tower->attackDelay) {
-//                for (int i = 0; i < tower->range; i++) {
-//                    Tower::idxToDir(tower->direction);
-//                }
-//                tower->attackTick = 0;
-//            } else tower->attackTick += 1.0f * dt;
-//        } else tower->attackTick = 0;
-//    }
 }

@@ -40,9 +40,10 @@ bool MainScene::init() {
     toolboxInner->setGlobalZOrder(999);
     addChild(toolboxInner);
     
-    //    timeLabel = Label::createWithTTF(, <#const std::string &fontFilePath#>, <#float fontSize#>)
+    //    timeLabel = Label::createWithTTF(, const std::string &fontFilePath, float fontSize)
     //    this->setPosition();
     //    this->addChild(timeLabel);
+    
     initializeMap();
     
     pathFinder = pathfinding::PathFinding::create();
