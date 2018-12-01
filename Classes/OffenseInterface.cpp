@@ -29,7 +29,6 @@ bool OffenseInterface::init(MainScene* parent)
 	parent->addChild(interfaceJenny);
 
 	parentScene = parent;
-
 	return true;
 }
 
@@ -41,6 +40,7 @@ bool OffenseInterface::isContain(Sprite* sprite, Point point)
 		return true;
 	}
 
+	CCLOG("sprite x: %f y: %f", sprite->getPosition().x, sprite->getPosition().y);
 	return false;
 }
 
@@ -49,7 +49,7 @@ void OffenseInterface::addUnit(Sprite* unit)
 	arrUnit.push_back(unit);
 }
 
-void OffenseInterface::addKenny(float dt)
+void OffenseInterface::addKenny()
 {
 	Size winSize = Director::getInstance()->getWinSize();
 
@@ -69,14 +69,44 @@ void OffenseInterface::addKenny(float dt)
 		MoveTo* moveTo = MoveTo::create(0.5f, parentScene->getRealPosition(path[i]));
 		acts.pushBack(moveTo);
 	}
-	//CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseInterface::selfRemover, this));
-	//acts.pushBack(callfunc);
+	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseInterface::selfRemover, this));
+	acts.pushBack(callfunc);
 
 	auto act = Sequence::create(acts);
 	auto rep = RepeatForever::create(act);
 
 	spriteKenny->runAction(rep);
 	addUnit(spriteKenny);
+}
+
+void OffenseInterface::addJenny()
+{
+	Size winSize = Director::getInstance()->getWinSize();
+
+	spriteJenny = Sprite::create("res/Jenny.png");
+	setFirstPosition(spriteJenny);
+	spriteJenny->setAnchorPoint(Vec2(0.5f, 0.5f));
+	spriteJenny->setScale(0.5f);
+
+	Vec2 entryPos = parentScene->getGridPosition(spriteJenny->getPosition());
+	std::vector<Vec2> path = parentScene->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+
+	parentScene->addChild(spriteJenny);
+
+	Vector<FiniteTimeAction*> acts;
+	for (int i = 0; i < path.size(); i++)
+	{
+		MoveTo* moveTo = MoveTo::create(0.5f, parentScene->getRealPosition(path[i]));
+		acts.pushBack(moveTo);
+	}
+	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseInterface::selfRemover, this));
+	acts.pushBack(callfunc);
+
+	auto act = Sequence::create(acts);
+	auto rep = RepeatForever::create(act);
+
+	spriteJenny->runAction(rep);
+	addUnit(spriteJenny);
 }
 
 void OffenseInterface::setFirstPosition(Sprite* sprite)
@@ -98,39 +128,19 @@ void OffenseInterface::selfRemover(Node* sender)
 	sender->removeFromParentAndCleanup(true);
 }
 
-bool OffenseInterface::onTouchBegan(Touch* touch, Event* event)
-{
-	auto touchPoint = touch->getLocation();
+void OffenseInterface::onMouseDown(EventMouse *e) {
+	auto touchPoint = e->getLocationInView();
 
-	CCLOG("onTouchBegan id = %d, x = %f, y = %f",
-		touch->getID(), touchPoint.x, touchPoint.y);
+	CCLOG("x = %f, y = %f", touchPoint.x, touchPoint.y);
 
-	isContain(interfaceKenny, touchPoint);
-	isContain(interfaceJenny, touchPoint);
-	//bool bTouch = pMan->getBoundingBox().containsPoint(touchPoint);
-
-	return true;
+	if (isContain(interfaceKenny, touchPoint))
+		addKenny();
+	if (isContain(interfaceJenny, touchPoint))
+		addJenny();
 }
 
-/*
-void OffenseInterface::onTouchMoved(Touch* touch, Event* event)
-{
-	auto touchPoint = touch->getLocation();
-
-	CCLOG("onTouchMoved id = %d, x = %f, y = %f",
-		touch->getID(), touchPoint.x, touchPoint.y);
+void OffenseInterface::onMouseUp(EventMouse *e) {
 }
 
-void OffenseInterface::onTouchEnded(Touch* touch, Event* event)
-{
-	auto touchPoint = touch->getLocation();
-
-	CCLOG("onTouchEnded id = %d, x = %f, y = %f",
-		touch->getID(), touchPoint.x, touchPoint.y);
+void OffenseInterface::onMouseMove(EventMouse *e) {
 }
-
-void OffenseInterface::onTouchCancelled(Touch* touch, Event* event)
-{
-
-}
-*/

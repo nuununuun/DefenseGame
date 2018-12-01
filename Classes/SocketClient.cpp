@@ -1,45 +1,38 @@
 #include "SocketClient.h"
 
+
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-#include<stdio.h>
-#include <winsock2.h>
+
+#ifdef _WIN32
+
+//#include <winsock2.h>
 #include <WS2tcpip.h>
-#include <vector>
-#include <sstream>
-#include <string>
 
 #pragma comment(lib, "wsock32.lib")
 #pragma comment(lib, "ws2_32.lib")
 
-std::vector<std::string> split(const std::string &s, char delim) {
-	std::vector<std::string> elems;
+#endif
 
-	std::stringstream ss;
-	ss.str(s);
-	std::string item;
-	while (getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
+#include"StringUtil.h"
 
-	return elems;
-}
+#include<stdio.h>
+#include <vector>
 
 
-void ErrorHandling(char* message)
-{
-	fputs(message, stderr);
-	fputc('\n', stderr);
-	exit(1);
-}
 
 
 SocketClient::SocketClient(std::string ip, short port)
 {
 	this->port = port;
+
+#ifdef _WIN32
+	WSADATA     wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
-
+	
+#endif
 	hSocket = socket(PF_INET, SOCK_STREAM, 0);
 
 	if (hSocket == INVALID_SOCKET)
@@ -69,10 +62,10 @@ void SocketClient::connectServer(std::function<void(bool)> callback)
 				if (len > 0)
 				{
 					std::string s_message = message;
-					auto s = split(message, '@');
+					auto s = StringUtil:: split(message, '@');
 					int size = atoi(s[0].data());
 					auto _s = s[1].substr(0, size);
-					auto msg = split(_s, ';');
+					auto msg = StringUtil::split(_s, ';');
 					onCallbacks[msg[0]](msg[1]);
 					onCallbacks.erase(msg[0]);
 				}
@@ -98,5 +91,15 @@ void SocketClient::on(std::string name, std::function<void(std::string)> callbac
 void SocketClient::close()
 {
 	closesocket(hSocket);
+
+#ifdef _WIN32
 	WSACleanup();
+#endif
+}
+
+void SocketClient::ErrorHandling(char * message)
+{
+	fputs(message, stderr);
+	fputc('\n', stderr);
+	exit(1);
 }

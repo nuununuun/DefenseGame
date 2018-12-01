@@ -1,37 +1,29 @@
 #include "SocketServer.h"
 
-#include <winsock2.h>
 #include <thread>
-#include <sstream>
 #include <vector>
 
+#include"StringUtil.h"
+
+#ifdef _WIN32
 #pragma comment(lib,"wsock32.lib")
+#endif
 
-std::vector<std::string> split(const std::string &s, char delim) {
-	std::vector<std::string> elems;
-
-	std::stringstream ss;
-	ss.str(s);
-	std::string item;
-	while (getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
-
-	return elems;
-}
-
-void ErrorHandling(char* message)
+void SocketServer::ErrorHandling(char* message)
 {
 	fputs(message, stderr);
 	fputc('\n', stderr);
-	//exit(1);
+	exit(1);
 }
 
 SocketServer::SocketServer(short port)
 {
 	this->port = port;
+#ifdef _WIN32
+	WSADATA     wsaData;
 	if(WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
+#endif
 	hServSock = socket(PF_INET, SOCK_STREAM, 0);
 	if (hServSock == INVALID_SOCKET)
 		ErrorHandling("socket() error!");
@@ -67,10 +59,10 @@ void SocketServer::listenClient(std::function<void()> callback)
 				if (len > 0)
 				{
 					std::string s_message = message;
-					auto s = split(message, '@');
+					auto s = StringUtil::split(message, '@');
 					int size = atoi(s[0].data());
 					auto _s = s[1].substr(0, size);
-					auto msg = split(_s, ';');
+					auto msg = StringUtil::split(_s, ';');
 					onCallbacks[msg[0]](msg[1]);
 					onCallbacks.erase(msg[0]);
 				}
@@ -98,7 +90,9 @@ void SocketServer::close()
 {
 	closesocket(hClntSock);
 	closesocket(hServSock);
+#ifdef _WIN32
 	WSACleanup();
+#endif
 	closed = true;
 }
 

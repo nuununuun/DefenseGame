@@ -41,8 +41,8 @@ bool MainScene::init() {
 	offenseInterface = OffenseInterface::create(this);
 	addChild(offenseInterface);
 
-	offenseInterface->addKenny(0.1f);
-
+	//offenseInterface->addKenny(0.1f);
+	//offenseInterface->addJenny(0.1f);
     return true;
 }
 
@@ -96,6 +96,7 @@ void MainScene::updateMap() {
 //}
 
 void MainScene::onMouseDown(EventMouse *e) {
+	offenseInterface->onMouseDown(e);
 }
 
 void MainScene::onMouseUp(EventMouse *e) {
