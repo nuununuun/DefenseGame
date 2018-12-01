@@ -6,7 +6,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>  
-#include <unistd.h> 
+#include <unistd.h>
+
+typedef int SOCKET;
+
 #endif
 #include<functional>
 #include<map>
@@ -34,5 +37,5 @@ private:
 	std::thread tConnect;
 
 	SOCKET      hSocket;
-	SOCKADDR_IN servAddr;
+	sockaddr_in servAddr;
 };

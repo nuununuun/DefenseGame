@@ -8,7 +8,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>  
-#include <unistd.h> 
+#include <unistd.h>
+
+typedef int SOCKET;
+
 #endif
 #include<thread>
 #include<map>
@@ -35,5 +38,5 @@ private:
 	std::thread tHear;
 	std::thread tListen;
 	SOCKET      hServSock, hClntSock;
-	SOCKADDR_IN servAddr, clntAddr;
+	sockaddr_in servAddr, clntAddr;
 };
