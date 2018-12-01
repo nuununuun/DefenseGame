@@ -15,8 +15,18 @@ USING_NS_CC;
 using namespace std;
 
 bool MainScene::init() {
+<<<<<<< HEAD
 
     
+=======
+    client = SocketIO::connect("http://10.10.0.66:8080", *this);
+    /*
+    client->on("news", [&] (SIOClient *client, const std::string &data) {
+        MessageBox("", "");
+        client->emit("abc", "asdf");
+    });
+    */
+>>>>>>> b4f5c3dc0a1d026d944971581fee97597d070080
     tileSize = 48.0f;
     
     mapData = MapData("data/map1.tmx");

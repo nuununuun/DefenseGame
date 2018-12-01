@@ -9,7 +9,6 @@
 
 #include "Tower.hpp"
 #include "Unit.hpp"
-#include "Projectile.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -183,6 +182,7 @@ void DefenseScene::clearPreview() {
 }
 
 void DefenseScene::update(float dt) {
+<<<<<<< HEAD
     for (auto &tower : towers) {
         // check
         if (tower->attackTick >= tower->attackDelay) {
@@ -198,4 +198,18 @@ void DefenseScene::update(float dt) {
     }
     updateTime(dt);
     
+=======
+//    for (auto &tower : towers) {
+//        // check
+//        if () {
+//            // 따로 빼야 할지도
+//            if (tower->attackTick >= tower->attackDelay) {
+//                for (int i = 0; i < tower->range; i++) {
+//                    Tower::idxToDir(tower->direction);
+//                }
+//                tower->attackTick = 0;
+//            } else tower->attackTick += 1.0f * dt;
+//        } else tower->attackTick = 0;
+//    }
+>>>>>>> b4f5c3dc0a1d026d944971581fee97597d070080
 }
