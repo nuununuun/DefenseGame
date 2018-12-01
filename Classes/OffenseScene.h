@@ -78,6 +78,7 @@ private:
 	cocos2d::Sprite *hpBar_empty;
 
 	float money;
+	std::vector<cocos2d::Sprite *>cost;
 };
 
 #endif

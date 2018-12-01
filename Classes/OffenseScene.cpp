@@ -12,6 +12,16 @@ bool OffenseScene::init() {
 
 	coreHealth = 100;
 	money = 20;
+
+	for (int i = 0; i < 5; i++)
+	{
+		cost.push_back(Sprite::create("res/cost.png"));
+		cost[i]->setPosition(Vec2(977 + i * 60, 128 + 4 * 98));
+		cost[i]->setGlobalZOrder(1001);
+		cost[i]->setVisible(false);
+		menuLayer->addChild(cost[i]);
+	}
+
 	//hpBar_fill = Sprite::create("res/hpBar_fill.png");
 	//hpBar_fill->setGlobalZOrder(1001);
 	//hpBar_empty = Sprite::create("res/hpBar_empty.png");
@@ -95,9 +105,53 @@ void OffenseScene::updateCoolTime(float dt)
 {
 	fireCool += dt;
 
-	if(money <= 50.0f)
-		money += dt;
+	if (money >= 50.0f) {
+		cost[0]->setVisible(true);
+		cost[1]->setVisible(true);
+		cost[2]->setVisible(true);
+		cost[3]->setVisible(true);
+		cost[4]->setVisible(true);
+	}
+	else if (money >= 40.0f) {
+		cost[0]->setVisible(true);
+		cost[1]->setVisible(true);
+		cost[2]->setVisible(true);
+		cost[3]->setVisible(true);
+		cost[4]->setVisible(false);
+	}
+	else if (money >= 30.0f) {
+		cost[0]->setVisible(true);
+		cost[1]->setVisible(true);
+		cost[2]->setVisible(true);
+		cost[3]->setVisible(false);
+		cost[4]->setVisible(false);
+	}
+	else if (money >= 20.0f) {
+		cost[0]->setVisible(true);
+		cost[1]->setVisible(true);
+		cost[2]->setVisible(false);
+		cost[3]->setVisible(false);
+		cost[4]->setVisible(false);
+	}
+	else if (money >= 10.0f) {
+		cost[0]->setVisible(true);
+		cost[1]->setVisible(false);
+		cost[2]->setVisible(false);
+		cost[3]->setVisible(false);
+		cost[4]->setVisible(false);
+	}
+	else {
+		cost[0]->setVisible(false);
+		cost[1]->setVisible(false);
+		cost[2]->setVisible(false);
+		cost[3]->setVisible(false);
+		cost[4]->setVisible(false);
+	}
 
+	if(money <= 50.0f)
+		money += dt * 10;
+
+	CCLOG("%f", money);
 	shootFromCharacter();
 }
 
