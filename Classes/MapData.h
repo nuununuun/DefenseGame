@@ -28,6 +28,8 @@ public:
     
     cocos2d::Vec2 getTargetPosition();
     
+    bool isOutOfIndex(const cocos2d::Vec2 &pos);
+    
     void updatePathData();
     std::vector<std::vector<int> > &getPathData();
     

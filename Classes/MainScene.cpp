@@ -79,7 +79,7 @@ void MainScene::updateMap() {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             switch (mapData.getTileData(j, i)) {
-                case EMPTY: break;
+                case EMPTY: mapTiles[i * width + j]->setColor(Color3B::WHITE); break;
                 case STARTING: mapTiles[i * width + j]->setColor(Color3B::GREEN); break;
                 case BARRICADE: mapTiles[i * width + j]->setColor(Color3B(100, 50, 50)); break;
                 case CORE: mapTiles[i * width + j]->setColor(Color3B::RED); break;
