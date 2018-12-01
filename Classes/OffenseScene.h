@@ -66,6 +66,7 @@ private:
 	float fireCool;
 
 	bool mIsShoot;
+    
 };
 
 #endif

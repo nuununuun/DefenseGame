@@ -8,7 +8,6 @@
 #include "MainScene.h"
 #include "Constant.h"
 
-
 #include "Tower.hpp"
 
 USING_NS_CC;
@@ -16,6 +15,11 @@ using namespace std;
 
 bool MainScene::init() {
     tileSize = 48.0f;
+    
+    client = SocketIO::connect("http://10.10.0.66:8080", *this);
+    client->on("news", [&](SIOClient *client, const std::string &data) {
+        client->emit("abc", "asdf");
+    });
     
     mapData = MapData("data/map1.tmx");
     
