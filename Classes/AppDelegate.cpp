@@ -123,8 +123,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
 //    auto scene = MainScene::create();
 //    auto scene = DefenseScene::create();
-//    auto scene = OffenseScene::create();
-    auto scene = TitleScene::create();
+    auto scene = OffenseScene::create();
+   // auto scene = TitleScene::create();
     // run
     director->runWithScene(scene);
 

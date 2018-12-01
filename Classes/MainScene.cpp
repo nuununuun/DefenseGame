@@ -28,6 +28,7 @@ bool MainScene::init() {
     Vec2 origin = size / 2;
     
 	auto bg = Sprite::create("res/main_1.png");
+	//bg->setScale(5.0f);
 	bg->setPosition(winSize * 0.5f);
     addChild(bg);
     
