@@ -47,8 +47,6 @@ public:
     
     bool isMouseDown = false;
     
-//    SocketServer socket;
-    
 };
 
 #endif /* DefenseScene_h */

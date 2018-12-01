@@ -5,7 +5,7 @@ using namespace std;
 
 bool OffenseScene::init() {
 	if (!MainScene::init()) return false;
-
+    
 	menuLayer = Layer::create();
 	addChild(menuLayer);
 
