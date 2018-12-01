@@ -49,7 +49,7 @@ void SocketClient::connectServer(std::function<void(bool)> callback)
 	connectCallback = callback;
 	tConnect = std::thread([&]() {
 		bool connect_try = true;
-		if (connect(hSocket, (SOCKADDR*)&servAddr, sizeof(servAddr)) == -1)
+		if (connect(hSocket, (sockaddr*)&servAddr, sizeof(servAddr)) == -1)
 			connect_try = false;
 		connectCallback(connect);
 		closed = false;
@@ -89,10 +89,11 @@ void SocketClient::on(std::string name, std::function<void(std::string)> callbac
 
 void SocketClient::close()
 {
-	closesocket(hSocket);
-
 #ifdef _WIN32
-	WSACleanup();
+    closesocket(hSocket);
+    WSACleanup();
+#else
+    ::close(hSocket);
 #endif
 }
 

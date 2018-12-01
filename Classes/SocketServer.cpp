@@ -33,7 +33,7 @@ SocketServer::SocketServer(short port)
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);  // ���� PC IP�ּ� ����
 	servAddr.sin_port = htons(port);        // ��Ʈ��ȣ
 
-	if (bind(hServSock, (SOCKADDR*)&servAddr, sizeof(servAddr)) == -1)
+	if (bind(hServSock, (sockaddr*)&servAddr, sizeof(servAddr)) == -1)
 		ErrorHandling("bind() error!");
 
 }
@@ -45,8 +45,8 @@ void SocketServer::listenClient(std::function<void()> callback)
 		if (listen(hServSock, 5) == -1)
 			ErrorHandling("listen() error");
 		sizeClientAddr = sizeof(clntAddr);
-		hClntSock = accept(hServSock, (SOCKADDR*)&clntAddr, &sizeClientAddr);   // Ŭ���̾�Ʈ�� ���� ��
-		if (hClntSock < 0)
+		hClntSock = accept(hServSock, (struct sockaddr*)&clntAddr, (socklen_t *)&sizeClientAddr); // Ŭ���̾�Ʈ�� ���� ��
+        if (hClntSock < 0)
 			ErrorHandling("accept() error!");
 		listenCallback();
 		closed = false;
@@ -88,10 +88,13 @@ void SocketServer::on(std::string name, std::function<void(std::string)> callbac
 
 void SocketServer::close()
 {
-	closesocket(hClntSock);
-	closesocket(hServSock);
 #ifdef _WIN32
 	WSACleanup();
+    closesocket(hClntSock);
+    closesocket(hServSock);
+#else
+    ::close(hClntSock);
+    ::close(hServSock);
 #endif
 	closed = true;
 }
