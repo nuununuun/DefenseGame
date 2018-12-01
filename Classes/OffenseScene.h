@@ -2,6 +2,7 @@
 #define OFFENSE_SCENE_H_
 
 #include "MainScene.h"
+#include <vector>
 
 class OffenseScene : public MainScene {
 public:
@@ -18,9 +19,11 @@ public:
 public:
 	void selectGrid(const cocos2d::Vec2 &pos);
 
-	cocos2d::DrawNode *lineRenderer;
+
 	cocos2d::Vec2 mouseDownPosition;
 
+	cocos2d::Layer *menuLayer;
+	std::vector<cocos2d::Sprite *>interfaceUnit;
 	/*
 	cocos2d::Layer *menuLayer;
 	std::vector<cocos2d::Sprite *> towerSamples;

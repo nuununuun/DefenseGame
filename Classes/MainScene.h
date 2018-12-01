@@ -45,7 +45,6 @@ protected:
     std::vector<cocos2d::Sprite *> mapTiles;
     cocos2d::DrawNode *debugPathDraw;
   
-	OffenseInterface* offenseInterface;
     
     cocos2d::EventListenerMouse *mouseListener;
     
