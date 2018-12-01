@@ -19,13 +19,12 @@ class MapData {
 public:
     MapData();
     MapData(const std::string &path);
-    
+        
     TileType getTileData(int x, int y);
     void setTileData(int x, int y, TileType type);
     
     // get all tile data
     std::vector<std::vector<int> > &getData();
-    
     cocos2d::Vec2 getTargetPosition();
     
     bool isOutOfIndex(const cocos2d::Vec2 &pos);
@@ -37,8 +36,9 @@ public:
 public:
     int width, height;
     
-private:
+public:
     std::vector<std::vector<int> > data;
+    std::vector<std::vector<int>> showData;
     std::vector<std::vector<int> > pathData;
     
 };

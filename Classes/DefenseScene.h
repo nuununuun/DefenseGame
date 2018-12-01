@@ -30,6 +30,7 @@ public:
     
     CREATE_FUNC(DefenseScene);
     
+    
 public:
     void selectGrid(const cocos2d::Vec2 &pos);
     
@@ -46,6 +47,7 @@ public:
     
     bool isMouseDown = false;
     
+//    SocketServer socket;
     
 };
 

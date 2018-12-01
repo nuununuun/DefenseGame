@@ -38,6 +38,11 @@ public:
     cocos2d::Vec2 getRealPosition(const cocos2d::Vec2 &gp);
     
     void updateMap();
+    bool updateTime(float dt);
+    
+//server:0 or client:1
+private:
+    int socket_status = 0;
     
 // non cocos object
 protected:
@@ -46,11 +51,15 @@ protected:
     
     bool check = false;
     
+    //게임 시간 기록
+    float timeNow = 60*5 *1000;
+    float secCounter=0;
 public:
     MapData mapData;
 
 // cocos object
 protected:
+    cocos2d::Label *timeLabel;
     cocos2d::Layer *mapLayer;
     std::vector<cocos2d::Sprite *> mapTiles;
     cocos2d::DrawNode *debugPathDraw;

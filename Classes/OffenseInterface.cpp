@@ -32,7 +32,7 @@ bool OffenseInterface::init(MainScene* parent)
 	parentScene = parent;
 
 	//flyingEye = FlyingEye::create(parentScene);
-	parentScene->addChild(flyingEye);
+//    parentScene->addChild(flyingEye);
 	return true;
 }
 

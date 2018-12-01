@@ -12,9 +12,15 @@
 
 class Projectile : public cocos2d::Sprite {
 public:
-    bool init();
+    static Projectile *create(float speed);
     
-    CREATE_FUNC(Projectile);
+    bool init(float speed);
+    
+    void update(float dt);
+    
+public:
+    float speed;
+    
 };
 
 #endif /* Projectile_hpp */

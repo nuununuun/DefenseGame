@@ -23,13 +23,15 @@ MapData::MapData(const string &path) {
     
     for (int i = 0; i < height; i++) {
         data.push_back(vector<int>());
+        showData.push_back(vector<int>());
         pathData.push_back(vector<int>());
     }
     for (int i = height - 1; i >= 0; i--) {
         for (int j = 0; j < width; j++) {
             int val;
             input >> val;
-            data[i].push_back(val * 10);
+            data[i].push_back(val/12 * 20);
+            showData[i].push_back(val - 1);
             pathData[i].push_back(0);
         }
     }

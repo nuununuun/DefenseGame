@@ -36,6 +36,11 @@ bool DefenseScene::init() {
     
     scheduleUpdate();
     
+//    socket = SocketServer(5001);
+//    socket.listenClient([&](){
+//        socket.emit("msg","connected");
+//    });
+    
     return true;
 }
 
@@ -74,6 +79,7 @@ void DefenseScene::onMouseMove(cocos2d::EventMouse *e) {
         towerPreview->setPosition(pos);
         
         auto gp = getGridPosition(e->getLocationInView());
+        CCLOG((to_string(gp.x) + ", " + to_string(gp.y)).c_str());
         if (mapData.isOutOfIndex(gp)) return;
         
         auto data = mapData.getTileData(gp.x, gp.y);
@@ -147,6 +153,7 @@ void DefenseScene::drawTowerRange(const Vec2 &gp) {
     directionRenderer->clear();
     for (int i = 0; i < 4; i++) {
         Vec2 dir = Tower::idxToDir(i);
+        if (mapData.isOutOfIndex(gp + dir)) continue;
         auto data = mapData.getTileData(gp.x + dir.x, gp.y + dir.y);
         
         if (mapData.isEquals(data, TileType::SETABLE)) continue;
@@ -160,6 +167,7 @@ bool DefenseScene::isAbleTower(const Vec2 &gp) {
     int cnt = 0;
     for (int i = 0; i < 4; i++) {
         Vec2 dir = Tower::idxToDir(i);
+        if (mapData.isOutOfIndex(gp + dir)) continue;
         auto data = mapData.getTileData(gp.x + dir.x, gp.y + dir.y);
         
         if (mapData.isEquals(data, TileType::SETABLE)) continue;
@@ -180,12 +188,14 @@ void DefenseScene::update(float dt) {
         if (tower->attackTick >= tower->attackDelay) {
             for (int i = 0; i < tower->range; i++) {
                 Tower::idxToDir(tower->direction);
-                auto proj = Projectile::create();
-                proj->setPosition(480, 480);
+                auto proj = Projectile::create(5);
+                proj->setPosition(tower->getPosition());
                 proj->setGlobalZOrder(1000);
                 addChild(proj);
             }
             tower->attackTick = 0;
         } else tower->attackTick += 1.0f * dt;
     }
+    updateTime(dt);
+    
 }
