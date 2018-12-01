@@ -20,14 +20,18 @@ public:
     void onMouseUp(cocos2d::EventMouse *e) override;
     void onMouseMove(cocos2d::EventMouse *e) override;
     
-    void update(float dt);
+    void putTower(int dir);
+    void clearPreview();
+    
+    void drawTowerRange(const cocos2d::Vec2 &gp);
+    bool isAbleTower(const cocos2d::Vec2 &gp);
     
     CREATE_FUNC(DefenseScene);
     
 public:
     void selectGrid(const cocos2d::Vec2 &pos);
     
-    cocos2d::DrawNode *lineRenderer;
+    cocos2d::DrawNode *directionRenderer;
     cocos2d::Vec2 mouseDownPosition;
     
     cocos2d::Layer *menuLayer;
@@ -35,6 +39,8 @@ public:
     std::vector<Tower *> towers;
     cocos2d::Node *selectedSample;
     cocos2d::Sprite *towerPreview;
+    
+    int towerState = 0;
     
     bool isMouseDown = false;
     

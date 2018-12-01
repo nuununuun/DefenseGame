@@ -12,9 +12,9 @@
 
 class Tower : public cocos2d::Sprite {
 public:
-    static Tower *create();
+    static Tower *create(int dir);
     
-    bool init();
+    bool init(int dir);
     
     void setVisibleRange();
     void setInvisibleRange();

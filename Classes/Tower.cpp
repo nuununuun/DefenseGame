@@ -9,23 +9,23 @@
 
 USING_NS_CC;
 
-Tower *Tower::create() {
+Tower *Tower::create(int dir) {
     auto ret = new (std::nothrow) Tower();
-    if (ret && ret->init()) {
+    if (ret && ret->init(dir)) {
         ret->autorelease();
     } else CC_SAFE_DELETE(ret);
     
     return ret;
 }
 
-bool Tower::init() {
+bool Tower::init(int dire) {
     if (!Sprite::initWithFile("res/tower1.png")) return false;
     
-    Vec2 dir = direction == 0 ? Vec2(-1, 0) : direction == 1 ? Vec2(1, 0) : direction == 2 ? Vec2(0, -1) : Vec2(0, 1);
-    
     rangeRenderer = DrawNode::create();
+    rangeRenderer->setVisible(false);
     addChild(rangeRenderer);
-    setDirection(direction);
+    
+    setDirection(dire);
     
     return true;
 }

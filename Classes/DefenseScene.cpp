@@ -16,8 +16,8 @@ using namespace std;
 bool DefenseScene::init() {
     if (!MainScene::init()) return false;
     
-    lineRenderer = DrawNode::create(3);
-    addChild(lineRenderer);
+    directionRenderer = DrawNode::create(3);
+    addChild(directionRenderer);
     
     menuLayer = Layer::create();
     addChild(menuLayer);
@@ -33,8 +33,6 @@ bool DefenseScene::init() {
         towerSamples.push_back(sample);
     }
     
-    scheduleUpdate();
-    
     return true;
 }
 
@@ -44,6 +42,7 @@ void DefenseScene::onMouseDown(cocos2d::EventMouse *e) {
     for (auto &towerSample : towerSamples) {
         if (towerSample->getBoundingBox().containsPoint(e->getLocationInView())) {
             selectedSample = towerSample;
+            towerState = 1;
             break;
         }
     }
@@ -51,30 +50,8 @@ void DefenseScene::onMouseDown(cocos2d::EventMouse *e) {
     if (selectedSample != nullptr) {
         towerPreview->setPosition(e->getLocationInView());
         towerPreview->setVisible(true);
+        directionRenderer->clear();
     }
-}
-
-void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
-    MainScene::onMouseUp(e);
-    
-    if (selectedSample != nullptr) {
-        towerPreview->setVisible(false);
-        
-        auto gp = getGridPosition(e->getLocationInView());
-        if (mapData.isOutOfIndex(gp)) return;
-        
-        auto data = mapData.getTileData(gp.x, gp.y);
-        if (data == TileType::SETABLE) {
-            auto tower = Tower::create();
-            tower->setPosition(getRealPosition(gp));
-            addChild(tower);
-            int type = (int)TileType::SETABLE + 1;
-            mapData.setTileData(gp.x, gp.y, (TileType)type);
-            towers.push_back(tower);
-        }
-    }
-    
-    selectedSample = nullptr;
 }
 
 void DefenseScene::onMouseMove(cocos2d::EventMouse *e) {
@@ -82,30 +59,78 @@ void DefenseScene::onMouseMove(cocos2d::EventMouse *e) {
     
     auto pos = e->getLocationInView();
     
-    for (auto tower : towers) {
-        if (tower->getBoundingBox().containsPoint(pos)) {
-            tower->setVisibleRange();
-        } else {
-            tower->setInvisibleRange();
+        for (auto tower : towers) {
+            if (tower->getBoundingBox().containsPoint(pos)) {
+                tower->setVisibleRange();
+            } else {
+                tower->setInvisibleRange();
+            }
         }
-    }
     
-    if (selectedSample != nullptr) {
+    if (towerState == 1) {
         towerPreview->setPosition(pos);
         
         auto gp = getGridPosition(e->getLocationInView());
         if (mapData.isOutOfIndex(gp)) return;
         
         auto data = mapData.getTileData(gp.x, gp.y);
-        if (data == TileType::SETABLE) {
+        if (data == TileType::SETABLE && isAbleTower(gp)) {
             towerPreview->setColor(Color3B::WHITE);
+            drawTowerRange(gp);
         } else {
             towerPreview->setColor(Color3B::RED);
+            directionRenderer->clear();
         }
     }
 }
 
-void DefenseScene::update(float dt) {
+void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
+    MainScene::onMouseUp(e);
+    auto pos = e->getLocationInView();
+    auto gp = getGridPosition(pos);
+    
+    if (towerState == 1) {
+        auto data = mapData.getTileData(gp.x, gp.y);
+        if (mapData.isOutOfIndex(gp) || !isAbleTower(gp) || data != TileType::SETABLE) {
+            towerState = 0;
+            clearPreview();
+            return;
+        }
+        
+        Vec2 rp = getRealPosition(gp);
+        towerPreview->setPosition(rp);
+
+        towerState = 2;
+    } else if (towerState == 2) {
+        for (int i = 0; i < 4; i++) {
+            Vec2 dir = i == 0 ? Vec2(-1, 0) : i == 1 ? Vec2(1, 0) : i == 2 ? Vec2(0, -1) : Vec2(0, 1);
+            
+            if (gp == dir + getGridPosition(towerPreview->getPosition())) {
+                putTower(i);
+                clearPreview();
+                directionRenderer->clear();
+                break;
+            }
+        }
+        
+        towerState = 0;
+    }
+    
+    selectedSample = nullptr;
+}
+
+void DefenseScene::putTower(int dir) {
+    towerState = 0;
+    
+    auto gp = getGridPosition(towerPreview->getPosition());
+    if (mapData.getTileData(gp.x, gp.y) == TileType::SETABLE) {
+        auto tower = Tower::create(dir);
+        tower->setPosition(getRealPosition(gp));
+        addChild(tower);
+        int type = (int)TileType::SETABLE + 1;
+        mapData.setTileData(gp.x, gp.y, (TileType)type);
+        towers.push_back(tower);
+    }
 }
 
 void DefenseScene::selectGrid(const Vec2 &pos) {
@@ -114,4 +139,35 @@ void DefenseScene::selectGrid(const Vec2 &pos) {
     mapData.setTileData(gridPosition.x, gridPosition.y, TileType::BARRICADE);
     
     updateMap();
+}
+
+void DefenseScene::drawTowerRange(const Vec2 &gp) {
+    directionRenderer->clear();
+    for (int i = 0; i < 4; i++) {
+        Vec2 dir = i == 0 ? Vec2(-1, 0) : i == 1 ? Vec2(1, 0) : i == 2 ? Vec2(0, -1) : Vec2(0, 1);
+        auto data = mapData.getTileData(gp.x + dir.x, gp.y + dir.y);
+        
+        if (mapData.isEquals(data, TileType::SETABLE)) continue;
+        
+        Vec2 rp = getRealPosition(gp);
+        directionRenderer->drawSolidRect(rp + dir * 48 - Vec2(20, 20), rp + dir * 48 + Vec2(20, 20), Color4F::RED);
+    }
+}
+
+bool DefenseScene::isAbleTower(const Vec2 &gp) {
+    int cnt = 0;
+    for (int i = 0; i < 4; i++) {
+        Vec2 dir = i == 0 ? Vec2(-1, 0) : i == 1 ? Vec2(1, 0) : i == 2 ? Vec2(0, -1) : Vec2(0, 1);
+        auto data = mapData.getTileData(gp.x + dir.x, gp.y + dir.y);
+        
+        if (mapData.isEquals(data, TileType::SETABLE)) continue;
+        
+        cnt += 1;
+    }
+    
+    return cnt;
+}
+
+void DefenseScene::clearPreview() {
+    towerPreview->setVisible(false);
 }
