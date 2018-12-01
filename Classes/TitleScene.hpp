@@ -11,6 +11,9 @@
 #include "cocos2d.h"
 #include "network/SocketIO.h"
 
+class DefenseScene;
+class OffenseScene;
+
 class TitleScene : public cocos2d::Scene {
 public:
     bool init();
@@ -21,6 +24,10 @@ public:
 	cocos2d::Sprite * bg;
 	cocos2d::Sprite * left, * right;
 	cocos2d::Sprite * title, * subTitle;
+
+	DefenseScene *dScene;
+	OffenseScene *oScene;
+	
 };
 
 #endif /* TitleScene_hpp */
