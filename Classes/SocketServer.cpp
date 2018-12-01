@@ -45,7 +45,11 @@ void SocketServer::listenClient(std::function<void()> callback)
 		if (listen(hServSock, 5) == -1)
 			ErrorHandling("listen() error");
 		sizeClientAddr = sizeof(clntAddr);
+#ifdef _WIN32
+		hClntSock = accept(hServSock, (struct sockaddr*)&clntAddr, &sizeClientAddr); // Ŭ���̾�Ʈ�� ���� ��
+#else
 		hClntSock = accept(hServSock, (struct sockaddr*)&clntAddr, (socklen_t *)&sizeClientAddr); // Ŭ���̾�Ʈ�� ���� ��
+#endif
         if (hClntSock < 0)
 			ErrorHandling("accept() error!");
 		listenCallback();
