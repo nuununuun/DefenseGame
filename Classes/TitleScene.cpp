@@ -27,7 +27,6 @@ bool TitleScene::init() {
         auto scene = DefenseScene::create();
         auto client = SocketIO::connect("http://10.10.0.66:8080", *scene);
         scene->client = client;
-        client->emit("defense", "");
         Director::getInstance()->replaceScene(scene);
     });
     

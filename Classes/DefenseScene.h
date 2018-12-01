@@ -12,6 +12,7 @@
 
 #include "Tower.hpp"
 #include "network/SocketIO.h"
+#include "OffenseUnit.h"
 
 using namespace cocos2d::network;
 
@@ -31,7 +32,19 @@ public:
     void drawTowerRange(const cocos2d::Vec2 &gp);
     bool isAbleTower(const cocos2d::Vec2 &gp);
     
+    virtual void onConnect(SIOClient* client) override;
+    
     CREATE_FUNC(DefenseScene);
+    
+public:
+    void addFlyingEye();
+    void addBaby();
+    void addFinger();
+    void addHeart();
+    void addRib();
+    
+    void selfRemover(cocos2d::Node* sender);
+    void setFirstPosition(cocos2d::Sprite* sprite);
     
 public:
     void selectGrid(const cocos2d::Vec2 &pos);
@@ -48,6 +61,9 @@ public:
     int towerState = 0;
     
     bool isMouseDown = false;
+    
+public:
+    std::vector<OffenseUnit*> offenseUnits;
     
 };
 

@@ -43,6 +43,10 @@ bool OffenseScene::init() {
 	return true;
 }
 
+void OffenseScene::onConnect(SIOClient* c) {
+    client->emit("offense", "");
+}
+
 void OffenseScene::updateCoolTime(float dt)
 {
 	fireCool += dt;
@@ -52,16 +56,26 @@ void OffenseScene::updateCoolTime(float dt)
 void OffenseScene::onMouseDown(cocos2d::EventMouse *e) {
 	MainScene::onMouseDown(e);
 	
-	if (interfaceFlyingEye->getBoundingBox().containsPoint(e->getLocationInView()))
+    if (interfaceFlyingEye->getBoundingBox().containsPoint(e->getLocationInView())) {
 		addFlyingEye();
-	if (interfaceBaby->getBoundingBox().containsPoint(e->getLocationInView()))
+        client->emit("summon", "0");
+    }
+    if (interfaceBaby->getBoundingBox().containsPoint(e->getLocationInView())) {
 		addBaby();
-	if (interfaceFinger->getBoundingBox().containsPoint(e->getLocationInView()))
+        client->emit("summon", "1");
+    }
+    if (interfaceFinger->getBoundingBox().containsPoint(e->getLocationInView())) {
 		addFinger();
-	if (interfaceHeart->getBoundingBox().containsPoint(e->getLocationInView()))
+        client->emit("summon", "2");
+    }
+    if (interfaceHeart->getBoundingBox().containsPoint(e->getLocationInView())) {
 		addHeart();
-	if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView()))
+        client->emit("summon", "3");
+    }
+    if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView())) {
 		addRib();
+        client->emit("summon", "4");
+    }
 
 	mPtShoot = e->getLocationInView();
 	mIsShoot = true;
@@ -283,7 +297,7 @@ void OffenseScene::addFlyingEye()
 
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteFlyingEye;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
@@ -336,7 +350,7 @@ void OffenseScene::addBaby()
 	
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteBaby;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(10);
@@ -389,7 +403,7 @@ void OffenseScene::addFinger()
 	
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteFinger;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
@@ -442,7 +456,7 @@ void OffenseScene::addHeart()
 	
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteHeart;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
@@ -495,7 +509,7 @@ void OffenseScene::addRib()
 	
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteRib;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);

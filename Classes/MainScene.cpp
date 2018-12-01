@@ -26,19 +26,19 @@ bool MainScene::init() {
     bg->setPosition(winSize * 0.5f);
     bg->getTexture()->setAliasTexParameters();
     bg->setGlobalZOrder(100);
-    addChild(bg);
+//    addChild(bg);
     
     auto toolbox = Sprite::create("res/toolbox.png");
     toolbox->setPosition(origin);
     toolbox->getTexture()->setAliasTexParameters();
     toolbox->setGlobalZOrder(1000);
-    addChild(toolbox);
+//    addChild(toolbox);
     
     auto toolboxInner = Sprite::create("res/toolboxInner.png");
     toolboxInner->setPosition(origin);
     toolboxInner->getTexture()->setAliasTexParameters();
     toolboxInner->setGlobalZOrder(999);
-    addChild(toolboxInner);
+//    addChild(toolboxInner);
     
     //    timeLabel = Label::createWithTTF(, const std::string &fontFilePath, float fontSize)
     //    this->setPosition();
@@ -136,12 +136,6 @@ bool MainScene::updateTime(float dt)
     }
     return false;
 }
-
-//bool MainScene::onTouchBegan(Touch* touch, Event* event)
-//{
-//    offenseInterface->onTouchBegan(touch, event);
-//    return true;
-//}
 
 void MainScene::onMouseDown(EventMouse *e) {
 }
