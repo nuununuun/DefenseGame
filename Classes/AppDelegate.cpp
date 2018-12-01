@@ -25,6 +25,7 @@
 #include "AppDelegate.h"
 #include "MainScene.h"
 #include "DefenseScene.h"
+#include "OffenseScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -120,8 +121,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
 //    auto scene = MainScene::create();
-    auto scene = DefenseScene::create();
-
+    //auto scene = DefenseScene::create();
+	auto scene = OffenseScene::create();
     // run
     director->runWithScene(scene);
 

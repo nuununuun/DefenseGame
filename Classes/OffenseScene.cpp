@@ -6,24 +6,15 @@ using namespace std;
 bool OffenseScene::init() {
 	if (!MainScene::init()) return false;
 
-	lineRenderer = DrawNode::create(3);
-	addChild(lineRenderer);
-
-	/*
 	menuLayer = Layer::create();
 	addChild(menuLayer);
 
-	towerPreview = Sprite::create("res/tower1.png");
-	towerPreview->setVisible(false);
-	addChild(towerPreview);
+	auto interfaceFlyingEye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
+	interfaceFlyingEye->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 2, 0));
+	interfaceFlyingEye->setScale(1.5f);
+	menuLayer->addChild(interfaceFlyingEye);
 
-	for (int i = 0; i < 8; i++) {
-		auto sample = Sprite::create("res/tower1.png");
-		sample->setPosition(Vec2(96, i * 64 + 48));
-		menuLayer->addChild(sample);
-		towerSamples.push_back(sample);
-	}
-	*/
+	interfaceUnit.push_back(interfaceFlyingEye);
 
 	scheduleUpdate();
 
@@ -32,74 +23,17 @@ bool OffenseScene::init() {
 
 void OffenseScene::onMouseDown(cocos2d::EventMouse *e) {
 	MainScene::onMouseDown(e);
-	/*
-	for (auto &towerSample : towerSamples) {
-		if (towerSample->getBoundingBox().containsPoint(e->getLocationInView())) {
-			selectedSample = towerSample;
-			break;
-		}
-	}
 
-	if (selectedSample != nullptr) {
-		towerPreview->setPosition(e->getLocationInView());
-		towerPreview->setVisible(true);
-	}
-	*/
 }
 
 void OffenseScene::onMouseUp(cocos2d::EventMouse *e) {
 	MainScene::onMouseUp(e);
-	/*
-	if (selectedSample != nullptr) {
-		towerPreview->setVisible(false);
 
-		auto gp = getGridPosition(e->getLocationInView());
-		if (mapData.isOutOfIndex(gp)) return;
-
-		auto data = mapData.getTileData(gp.x, gp.y);
-		if (data == TileType::SETABLE) {
-			auto tower = Tower::create();
-			tower->setPosition(getRealPosition(gp));
-			addChild(tower);
-			int type = (int)TileType::SETABLE + 1;
-			mapData.setTileData(gp.x, gp.y, (TileType)type);
-			towers.push_back(tower);
-		}
-	}
-
-	selectedSample = nullptr;
-	*/
 }
 
 void OffenseScene::onMouseMove(cocos2d::EventMouse *e) {
 	MainScene::onMouseMove(e);
-	/*
-	auto pos = e->getLocationInView();
 
-	for (auto tower : towers) {
-		if (tower->getBoundingBox().containsPoint(pos)) {
-			tower->setVisibleRange();
-		}
-		else {
-			tower->setInvisibleRange();
-		}
-	}
-
-	if (selectedSample != nullptr) {
-		towerPreview->setPosition(pos);
-
-		auto gp = getGridPosition(e->getLocationInView());
-		if (mapData.isOutOfIndex(gp)) return;
-
-		auto data = mapData.getTileData(gp.x, gp.y);
-		if (data == TileType::SETABLE) {
-			towerPreview->setColor(Color3B::WHITE);
-		}
-		else {
-			towerPreview->setColor(Color3B::RED);
-		}
-	}
-	*/
 }
 
 void OffenseScene::update(float dt) {

@@ -6,7 +6,6 @@
 //
 
 #include "MainScene.h"
-#include "OffenseInterface.h"
 #include "Constant.h"
 
 #include "Tower.hpp"

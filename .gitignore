@@ -191,3 +191,4 @@ tests/cpp-tests/Resources/audio
 [Cc]ocos2d/
 [Pp]roj.*/
 CMakeLists.txt
+Classes/AppDelegate.cpp
