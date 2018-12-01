@@ -18,9 +18,21 @@ public:
     void onMouseUp(cocos2d::EventMouse *e) override;
     void onMouseMove(cocos2d::EventMouse *e) override;
     
+    void update(float dt);
+    
     CREATE_FUNC(DefenseScene);
     
 public:
+    void selectGrid(const cocos2d::Vec2 &pos);
+    
+    cocos2d::DrawNode *lineRenderer;
+    cocos2d::Vec2 mouseDownPosition;
+    
+    cocos2d::Layer *menuLayer;
+    std::vector<cocos2d::Sprite *> towerSamples;
+    cocos2d::Node *selectedSample;
+    
+    bool isMouseDown = false;
     
     
 };

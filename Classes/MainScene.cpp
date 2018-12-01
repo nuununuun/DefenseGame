@@ -72,6 +72,20 @@ void MainScene::initializeMap() {
     }
 }
 
+void MainScene::updateMap() {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            switch (mapData.getTileData(j, i)) {
+                case EMPTY: break;
+                case STARTING: mapTiles[i * width + j]->setColor(Color3B::GREEN); break;
+                case BARRICADE: mapTiles[i * width + j]->setColor(Color3B(100, 50, 50)); break;
+                case CORE: mapTiles[i * width + j]->setColor(Color3B::RED); break;
+                case SETABLE: mapTiles[i * width + j]->setColor(Color3B::GRAY); break;
+            }
+        }
+    }
+}
+
 //bool MainScene::onTouchBegan(Touch* touch, Event* event)
 //{
 //    offenseInterface->onTouchBegan(touch, event);
