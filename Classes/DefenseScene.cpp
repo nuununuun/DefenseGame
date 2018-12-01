@@ -63,11 +63,13 @@ void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
         auto gp = getGridPosition(e->getLocationInView());
         if (mapData.isOutOfIndex(gp)) return;
         
-        auto tileData = mapData.getTileData(gp.x, gp.y);
-        if ((tileData > TileType::EMPTY && tileData < TileType::EMPTY + 10)) {
+        auto data = mapData.getTileData(gp.x, gp.y);
+        if (mapData.isEquals(data, TileType::EMPTY)) {
             auto tower = Tower::create();
             tower->setPosition(getRealPosition(gp));
             addChild(tower);
+            int type = (int)TileType::SETABLE + 1;
+            mapData.setTileData(gp.x, gp.y, (TileType)type);
         }
     }
     
@@ -83,8 +85,8 @@ void DefenseScene::onMouseMove(cocos2d::EventMouse *e) {
         auto gp = getGridPosition(e->getLocationInView());
         if (mapData.isOutOfIndex(gp)) return;
         
-        auto tileData = mapData.getTileData(gp.x, gp.y);
-        if (!(tileData > TileType::EMPTY && tileData < TileType::EMPTY + 10)) {
+        auto data = mapData.getTileData(gp.x, gp.y);
+        if (!mapData.isEquals(data, TileType::EMPTY)) {
             towerPreview->setColor(Color3B::RED);
         } else {
             towerPreview->setColor(Color3B::WHITE);
