@@ -69,8 +69,8 @@ void OffenseInterface::addKenny(float dt)
 		MoveTo* moveTo = MoveTo::create(0.5f, parentScene->getRealPosition(path[i]));
 		acts.pushBack(moveTo);
 	}
-	//CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseInterface::selfRemover, this));
-	//acts.pushBack(callfunc);
+	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseInterface::selfRemover, this));
+	acts.pushBack(callfunc);
 
 	auto act = Sequence::create(acts);
 	auto rep = RepeatForever::create(act);

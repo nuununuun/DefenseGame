@@ -14,11 +14,15 @@ public:
 	void emit(std::string name, std::string message);
 	void on(std::string name, std::function<void(std::string)> callback);
 	void close();
+
+private:
+
+	void ErrorHandling(char* message);
 private:
 	int port;
 	bool closed = true;
 
-	std::function<void()> connectCallback;
+	std::function<void(bool)> connectCallback;
 	std::map<std::string, std::function<void(std::string)>> onCallbacks;
 	std::thread tHear;
 	std::thread tConnect;

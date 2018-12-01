@@ -17,6 +17,8 @@ public:
 	void close();
 
 private:
+	void ErrorHandling(char* message);
+private:
 	short port;
 	int sizeClientAddr;
 	bool closed = true;
