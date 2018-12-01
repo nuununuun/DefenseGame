@@ -25,15 +25,15 @@ SocketServer::SocketServer(short port)
 		ErrorHandling("WSAStartup() error!");
 #endif
 	hServSock = socket(PF_INET, SOCK_STREAM, 0);
-	if (hServSock == INVALID_SOCKET)
+	if (hServSock < 0)
 		ErrorHandling("socket() error!");
 	memset(&servAddr, 0, sizeof(servAddr));
 
 	servAddr.sin_family = AF_INET;
-	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);  // ÇöÀç PC IPÁÖ¼Ò »ç¿ë
-	servAddr.sin_port = htons(port);        // Æ÷Æ®¹øÈ£
+	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);  // ï¿½ï¿½ï¿½ï¿½ PC IPï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½
+	servAddr.sin_port = htons(port);        // ï¿½ï¿½Æ®ï¿½ï¿½È£
 
-	if (bind(hServSock, (SOCKADDR*)&servAddr, sizeof(servAddr)) == SOCKET_ERROR)
+	if (bind(hServSock, (SOCKADDR*)&servAddr, sizeof(servAddr)) == -1)
 		ErrorHandling("bind() error!");
 
 }
@@ -42,11 +42,11 @@ void SocketServer::listenClient(std::function<void()> callback)
 {
 	listenCallback = callback;
 	tListen = std::thread([&]() {
-		if (listen(hServSock, 5) == SOCKET_ERROR)
+		if (listen(hServSock, 5) == -1)
 			ErrorHandling("listen() error");
 		sizeClientAddr = sizeof(clntAddr);
-		hClntSock = accept(hServSock, (SOCKADDR*)&clntAddr, &sizeClientAddr);   // Å¬¶óÀÌ¾ðÆ®¿Í Åë½Å ÇÒ
-		if (hClntSock == INVALID_SOCKET)
+		hClntSock = accept(hServSock, (SOCKADDR*)&clntAddr, &sizeClientAddr);   // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+		if (hClntSock < 0)
 			ErrorHandling("accept() error!");
 		listenCallback();
 		closed = false;
