@@ -20,9 +20,11 @@ bool MainScene::init() {
     mapData = MapData("data/map1.tmx");
     
     auto size = Director::getInstance()->getVisibleSize();
+	auto winSize = Director::getInstance()->getWinSize();
     Vec2 origin = size / 2;
     
-    auto bg = LayerColor::create(Color4B::GRAY);
+	auto bg = Sprite::create("res/main_1.png");
+	bg->setPosition(winSize * 0.5f);
     addChild(bg);
     
 //    timeLabel = Label::createWithTTF(, <#const std::string &fontFilePath#>, <#float fontSize#>)

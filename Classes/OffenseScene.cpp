@@ -9,28 +9,30 @@ bool OffenseScene::init() {
 	menuLayer = Layer::create();
 	addChild(menuLayer);
 
+	//sample->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (j + 1), i * 64 + 72));
+
 	interfaceFlyingEye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
-	interfaceFlyingEye->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 0, 0));
+	interfaceFlyingEye->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 0 * 64 + 72));
 	interfaceFlyingEye->setScale(1.5f);
 	menuLayer->addChild(interfaceFlyingEye);
 
 	interfaceBaby = Sprite::create("res/Baby_R.png", Rect(0, 0, 32, 32));
-	interfaceBaby->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 1, 0));
+	interfaceBaby->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 1 * 64 + 72));
 	interfaceBaby->setScale(1.5f);
 	menuLayer->addChild(interfaceBaby);
 
 	interfaceFinger = Sprite::create("res/Finger_R.png", Rect(0, 0, 32, 32));
-	interfaceFinger->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 2, 0));
+	interfaceFinger->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 2 * 64 + 72));
 	interfaceFinger->setScale(1.5f);
 	menuLayer->addChild(interfaceFinger);
 
 	interfaceHeart = Sprite::create("res/Heart_R.png", Rect(0, 0, 32, 32));
-	interfaceHeart->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 3, 0));
+	interfaceHeart->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 3 * 64 + 72));
 	interfaceHeart->setScale(1.5f);
 	menuLayer->addChild(interfaceHeart);
 
 	interfaceRib = Sprite::create("res/Rib_R.png", Rect(0, 0, 32, 32));
-	interfaceRib->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 4, 0));
+	interfaceRib->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (1 + 1), 0 * 64 + 72));
 	interfaceRib->setScale(1.5f);
 	menuLayer->addChild(interfaceRib);
 
@@ -126,7 +128,7 @@ void OffenseScene::shootFromCharacter()
 {
 	if (mIsShoot == true)
 	{
-		if (fireCool >= 0.1f)
+		if (fireCool >= 0.01f)
 		{
 			fireCool = 0;
 			addShootFire(mPtShoot);
@@ -176,6 +178,22 @@ void OffenseScene::IsCollision(float dt)
 				u->curEnergy -= 1.0f;
 				if (u->curEnergy <= 0)
 				{
+					auto textureFlying_eye = Sprite::create("res/boom.png")->getTexture();
+
+					Animation* animation = Animation::create();
+					animation->setDelayPerUnit(0.1f);
+
+					for (int i = 0; i < 11; i++)
+						animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(48 * i, 0, 48, 48));
+
+					Animate* animate = Animate::create(animation);
+
+					auto sprite = Sprite::create("res/boom.png", Rect(0, 0, 48, 48));
+					sprite->setScale(1.5f);
+					//setFirstPosition(spriteFlyingEye);
+					sprite->setPosition(u->body->getPosition());
+					this->addChild(sprite);
+					sprite->runAction(animate);
 					u->body->removeFromParentAndCleanup(true);
 					u = nullptr;
 					offenseUnits.erase(iterE);
@@ -235,7 +253,7 @@ void OffenseScene::addFlyingEye()
 	Animate* animate = Animate::create(animation);
 
 	auto spriteFlyingEye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
-	spriteFlyingEye->setScale(1.5f);
+	spriteFlyingEye->setScale(2.0f);
 	setFirstPosition(spriteFlyingEye);
 	this->addChild(spriteFlyingEye);
 
