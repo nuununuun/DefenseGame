@@ -44,7 +44,6 @@ bool OffenseScene::init() {
 }
 
 void OffenseScene::onConnect(SIOClient* c) {
-    client->emit("offense", "");
 }
 
 void OffenseScene::updateCoolTime(float dt)
