@@ -29,5 +29,22 @@ bool Unit::init() {
 }
 
 void Unit::onEnter() {
-    auto gp = parentScene->getGridPosition(getPosition());
+    auto pos = parentScene->getGridPosition(getPosition());
+    path = parentScene->pathFinder->getShortestPath(pos, Vec2(16, 6));
+    
+    auto dn = DrawNode::create();
+    dn->clear();
+    parentScene->addChild(dn);
+    
+    for (int i = 0; i < path.size() - 1; i++) {
+        Vec2 src = parentScene->getRealPosition(path[i]);
+        Vec2 dst = parentScene->getRealPosition(path[i + 1]);
+        dn->drawLine(src, dst, Color4F::RED);
+    }
+    
+    scheduleUpdate();
+}
+
+void Unit::update(float dt) {
+    
 }

@@ -92,7 +92,6 @@ Vec2 MainScene::getGridPosition(const Vec2 &rp) {
     return Vec2(int((p.x + width * tileSize * 0.5f) / tileSize), int((p.y + height * tileSize * 0.5f) / tileSize));
 }
 
-//Vec2 MainScene::getRealPosition(const cocos2d::Vec2 &gp) {
-//    auto p = gp * tileSize;
-//    return p;//Vec2(int((p.x + width * tileSize * 0.5f) / tileSize), int((p.y + height * tileSize * 0.5f) / tileSize));
-//}
+Vec2 MainScene::getRealPosition(const cocos2d::Vec2 &gp) {
+    return mapLayer->convertToWorldSpace(gp * tileSize) - Vec2(width - 1, height - 1) * tileSize * 0.5f;
+}

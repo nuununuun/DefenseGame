@@ -25,7 +25,7 @@ void DefenseScene::onMouseDown(cocos2d::EventMouse *e) {
     auto pos = e->getLocationInView();
     auto unit = Unit::create(this);
     auto gp = getGridPosition(pos);
-    unit->setPosition(pos);
+    unit->setPosition(getRealPosition(gp));
     addChild(unit);
     
 }

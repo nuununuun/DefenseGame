@@ -20,8 +20,12 @@ public:
     
     void onEnter() override;
     
+    void update(float dt);
+    
 private:
     MainScene *parentScene;
+    
+    std::vector<cocos2d::Vec2> path;
     
 };
 

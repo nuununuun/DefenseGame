@@ -27,7 +27,7 @@ public:
     virtual void onMouseMove(cocos2d::EventMouse *e);
     
     cocos2d::Vec2 getGridPosition(const cocos2d::Vec2 &rp);
-//    cocos2d::Vec2 getRealPosition(const cocos2d::Vec2 &gp);
+    cocos2d::Vec2 getRealPosition(const cocos2d::Vec2 &gp);
     
 // non cocos object
 private:
@@ -43,9 +43,11 @@ private:
     cocos2d::DrawNode *debugPathDraw;
   
 	OffenseInterface* offenseInterface;
-    pathfinding::PathFinding *pathFinder;
     
     cocos2d::EventListenerMouse *mouseListener;
+    
+public:
+    pathfinding::PathFinding *pathFinder;
     
 };
 
