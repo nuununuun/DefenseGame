@@ -36,6 +36,8 @@ protected:
     int width, height;
     float tileSize;
     
+    bool check = false;
+    
 public:
     MapData mapData;
 
