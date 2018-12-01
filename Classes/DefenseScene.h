@@ -20,6 +20,8 @@ public:
     void onMouseUp(cocos2d::EventMouse *e) override;
     void onMouseMove(cocos2d::EventMouse *e) override;
     
+    void update(float dt);
+    
     void putTower(int dir);
     void clearPreview();
     

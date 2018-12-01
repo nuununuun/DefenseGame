@@ -33,6 +33,8 @@ bool DefenseScene::init() {
         towerSamples.push_back(sample);
     }
     
+    scheduleUpdate();
+    
     return true;
 }
 
@@ -90,8 +92,7 @@ void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
     auto gp = getGridPosition(pos);
     
     if (towerState == 1) {
-        auto data = mapData.getTileData(gp.x, gp.y);
-        if (mapData.isOutOfIndex(gp) || !isAbleTower(gp) || data != TileType::SETABLE) {
+        if (mapData.isOutOfIndex(gp) || !isAbleTower(gp) || mapData.getTileData(gp.x, gp.y) != TileType::SETABLE) {
             towerState = 0;
             clearPreview();
             return;
@@ -103,7 +104,7 @@ void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
         towerState = 2;
     } else if (towerState == 2) {
         for (int i = 0; i < 4; i++) {
-            Vec2 dir = i == 0 ? Vec2(-1, 0) : i == 1 ? Vec2(1, 0) : i == 2 ? Vec2(0, -1) : Vec2(0, 1);
+            Vec2 dir = Tower::idxToDir(i);
             
             if (gp == dir + getGridPosition(towerPreview->getPosition())) {
                 putTower(i);
@@ -144,7 +145,7 @@ void DefenseScene::selectGrid(const Vec2 &pos) {
 void DefenseScene::drawTowerRange(const Vec2 &gp) {
     directionRenderer->clear();
     for (int i = 0; i < 4; i++) {
-        Vec2 dir = i == 0 ? Vec2(-1, 0) : i == 1 ? Vec2(1, 0) : i == 2 ? Vec2(0, -1) : Vec2(0, 1);
+        Vec2 dir = Tower::idxToDir(i);
         auto data = mapData.getTileData(gp.x + dir.x, gp.y + dir.y);
         
         if (mapData.isEquals(data, TileType::SETABLE)) continue;
@@ -157,7 +158,7 @@ void DefenseScene::drawTowerRange(const Vec2 &gp) {
 bool DefenseScene::isAbleTower(const Vec2 &gp) {
     int cnt = 0;
     for (int i = 0; i < 4; i++) {
-        Vec2 dir = i == 0 ? Vec2(-1, 0) : i == 1 ? Vec2(1, 0) : i == 2 ? Vec2(0, -1) : Vec2(0, 1);
+        Vec2 dir = Tower::idxToDir(i);
         auto data = mapData.getTileData(gp.x + dir.x, gp.y + dir.y);
         
         if (mapData.isEquals(data, TileType::SETABLE)) continue;
@@ -170,4 +171,19 @@ bool DefenseScene::isAbleTower(const Vec2 &gp) {
 
 void DefenseScene::clearPreview() {
     towerPreview->setVisible(false);
+}
+
+void DefenseScene::update(float dt) {
+//    for (auto &tower : towers) {
+//        // check
+//        if () {
+//            // 따로 빼야 할지도
+//            if (tower->attackTick >= tower->attackDelay) {
+//                for (int i = 0; i < tower->range; i++) {
+//                    Tower::idxToDir(tower->direction);
+//                }
+//                tower->attackTick = 0;
+//            } else tower->attackTick += 1.0f * dt;
+//        } else tower->attackTick = 0;
+//    }
 }
