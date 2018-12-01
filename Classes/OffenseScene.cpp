@@ -4,10 +4,23 @@ USING_NS_CC;
 using namespace std;
 
 bool OffenseScene::init() {
-	if (!MainScene::init()) return false;
+	if (!MainScene::init()) 
+		return false;
     
 	menuLayer = Layer::create();
 	addChild(menuLayer);
+
+	coreHealth = 100;
+	hpBar_fill = Sprite::create("res/hpBar_fill.png");
+	hpBar_fill->setGlobalZOrder(1001);
+	hpBar_empty = Sprite::create("res/hpBar_empty.png");
+	hpBar_empty->setGlobalZOrder(1001);
+
+	hpBar_fill->setPosition(Vec2(967 + 0 * 98, 118 + 4 * 98));
+	hpBar_empty->setPosition(Vec2(967 + 0 * 98, 118 + 4 * 98));
+
+	menuLayer->addChild(hpBar_empty);
+	menuLayer->addChild(hpBar_fill);
 
 	//sample->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (j + 1), i * 64 + 72));
 	//setPosition(Vec2(967 + j * 98, 118 + i * 98));
@@ -268,6 +281,8 @@ void OffenseScene::selfRemover(Node* sender)
 
 		if (sender == u->body)
 		{
+			coreHealth -= u->attackDamage;
+			hpBar_fill->setScaleX(coreHealth * 0.01f);
 			sender->removeFromParentAndCleanup(true);
 			u = nullptr;
 			offenseUnits.erase(iterE);
@@ -326,6 +341,8 @@ void OffenseScene::addFlyingEye()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }
@@ -380,6 +397,8 @@ void OffenseScene::addBaby()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(10);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }
@@ -434,6 +453,8 @@ void OffenseScene::addFinger()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }
@@ -488,6 +509,8 @@ void OffenseScene::addHeart()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }
@@ -542,6 +565,8 @@ void OffenseScene::addRib()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }
@@ -596,6 +621,8 @@ void OffenseScene::addTooth()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }
@@ -650,6 +677,8 @@ void OffenseScene::addCaecum()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }
@@ -704,6 +733,8 @@ void OffenseScene::addFist()
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
+	unit->attackDamage = 2;
+	unit->cost = 2;
 
 	offenseUnits.push_back(unit);
 }

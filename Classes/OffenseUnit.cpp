@@ -1,6 +1,6 @@
 #include "OffenseUnit.h"
 
-OffenseUnit::OffenseUnit() : body(NULL), maxEnergy(100), curEnergy(0), eUnitType(RUSH), isEnermy(true)
+OffenseUnit::OffenseUnit() : body(NULL), maxEnergy(100), curEnergy(0), eUnitType(RUSH), isEnermy(true), attackDamage(0)
 {
 }
 

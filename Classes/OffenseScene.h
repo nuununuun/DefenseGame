@@ -74,7 +74,10 @@ private:
 	float fireCool;
 
 	bool mIsShoot;
-    
+private:
+	int coreHealth;
+	cocos2d::Sprite *hpBar_fill;
+	cocos2d::Sprite *hpBar_empty;
 };
 
 #endif

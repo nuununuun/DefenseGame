@@ -25,6 +25,9 @@ public:
     float maxEnergy;
     float curEnergy;
     bool isEnermy;
+	int attackDamage;
+	int cost;
+	int speed;
 };
 
 #endif
