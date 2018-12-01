@@ -16,7 +16,7 @@ public:
 	bool isContain(cocos2d::Sprite* sprite, cocos2d::Point);
 
 	void addKenny();
-	void addJenny();
+	void addFlying_eye();
 
 	void addUnit(cocos2d::Sprite* unit);
 
@@ -30,10 +30,10 @@ public:
 private:
 	std::vector<cocos2d::Sprite*> arrUnit;
 	cocos2d::Sprite* interfaceKenny;
-	cocos2d::Sprite* interfaceJenny;
+	cocos2d::Sprite* interfaceFlying_eye;
 
 	cocos2d::Sprite* spriteKenny;
-	cocos2d::Sprite* spriteJenny;
+	cocos2d::Sprite* spriteFlying_eye;
 
 	MainScene* parentScene;
 };

@@ -24,9 +24,10 @@ bool OffenseInterface::init(MainScene* parent)
 	interfaceKenny->setPosition(Vec2(336, 48) * 0.5f + Vec2(336, 0));
 	parent->addChild(interfaceKenny);
 	
-	interfaceJenny = Sprite::create("res/jenny.png");
-	interfaceJenny->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 2, 0));
-	parent->addChild(interfaceJenny);
+	interfaceFlying_eye = Sprite::create("res/Flying_eye_R.png");
+	interfaceFlying_eye->setTextureRect(Rect(0, 0, 32, 32));
+	interfaceFlying_eye->setPosition(Vec2(336, 48) * 0.5f + Vec2(336 + 48 * 2, 0));
+	parent->addChild(interfaceFlying_eye);
 
 	parentScene = parent;
 	return true;
@@ -79,32 +80,45 @@ void OffenseInterface::addKenny()
 	addUnit(spriteKenny);
 }
 
-void OffenseInterface::addJenny()
+void OffenseInterface::addFlying_eye()
 {
 	Size winSize = Director::getInstance()->getWinSize();
 
-	spriteJenny = Sprite::create("res/Flying_eye_R.png");
-	spriteJenny->setTextureRect(Rect(0, 0, 32, 32));
-	setFirstPosition(spriteJenny);
-	spriteJenny->setAnchorPoint(Vec2(0.5f, 0.5f));
-//	spriteJenny->setScale(0.5f);
+	/*
+	auto sprite = Sprite::create("res/Flying_eye_R.png");
+	auto texture = sprite->getTexture();
 
-	SpriteFrameCache* frameCache = SpriteFrameCache::getInstance();
+	auto animation = Animation::create();
+	animation->setDelayPerUnit(0.1f);
+
+	for(int i=0; i<10; i++)
+		animation->addSpriteFrameWithTexture(texture, Rect(32 * i, 0, 32, 32));
+
+	auto pMan = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
+	setFirstPosition(pMan);
+	parentScene->addChild(pMan);
+
+	auto animate = Animate::create(animation);
+	auto rep = RepeatForever::create(animate);
+	pMan->runAction(rep);
+	*/
+	
+	auto textureFlying_eye = Sprite::create("res/Flying_eye_R.png")->getTexture();
+
 	Animation* animation = Animation::create();
-	animation->setDelayPerUnit(0.3f);
+	animation->setDelayPerUnit(0.1f);
 
 	for (int i = 0; i < 10; i++)
-	{
-		frameCache->addSpriteFrame(SpriteFrame::createWithTexture(spriteJenny->getTexture(), Rect(32 * i, 0, 32, 32)), "res/Flying_eye_R.png");
-		animation->addSpriteFrameWithTexture(spriteJenny->getTexture(), Rect(32 * i, 0, 32, 32));
-	}
+		animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
 
 	Animate* animate = Animate::create(animation);
 
-	Vec2 entryPos = parentScene->getGridPosition(spriteJenny->getPosition());
-	std::vector<Vec2> path = parentScene->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+	spriteFlying_eye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
+	setFirstPosition(spriteFlying_eye);
+	parentScene->addChild(spriteFlying_eye);
 
-	parentScene->addChild(spriteJenny);
+	Vec2 entryPos = parentScene->getGridPosition(spriteFlying_eye->getPosition());
+	std::vector<Vec2> path = parentScene->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
 
 	Vector<FiniteTimeAction*> moves;
 	for (int i = 0; i < path.size(); i++)
@@ -112,20 +126,21 @@ void OffenseInterface::addJenny()
 		MoveTo* moveTo = MoveTo::create(0.5f, parentScene->getRealPosition(path[i]));
 		moves.pushBack(moveTo);
 	}
+	
 	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseInterface::selfRemover, this));
-	//acts.pushBack(callfunc);
-	//acts.pushBack(animate);
+	moves.pushBack(callfunc);
+
 	auto moveSeq = Sequence::create(moves);
-	Vector<FiniteTimeAction*> actions;
-	actions.pushBack(moveSeq);
-	actions.pushBack(animate);
-	actions.pushBack(callfunc);
+	//Vector<FiniteTimeAction*> actions;
+	//actions.pushBack(moveSeq);
+	//actions.pushBack(animateReapeat);
+	//actions.pushBack(callfunc);
 
-	auto act = Spawn::create(actions);
-	auto rep = RepeatForever::create(act);
+	auto animateReapeat = RepeatForever::create(animate);
+	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
-	spriteJenny->runAction(rep);
-	addUnit(spriteJenny);
+	spriteFlying_eye->runAction(act);
+	addUnit(spriteFlying_eye);
 }
 
 void OffenseInterface::setFirstPosition(Sprite* sprite)
@@ -154,8 +169,8 @@ void OffenseInterface::onMouseDown(EventMouse *e) {
 
 	if (isContain(interfaceKenny, touchPoint))
 		addKenny();
-	if (isContain(interfaceJenny, touchPoint))
-		addJenny();
+	if (isContain(interfaceFlying_eye, touchPoint))
+		addFlying_eye();
 }
 
 void OffenseInterface::onMouseUp(EventMouse *e) {
