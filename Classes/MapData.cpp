@@ -72,3 +72,10 @@ cocos2d::Vec2 MapData::getTargetPosition() {
     }
 }
 
+bool MapData::isOutOfIndex(const cocos2d::Vec2 &pos) {
+    return !(pos.x > 0 && pos.x < width && pos.y > 0 && pos.y < height);
+}
+
+bool MapData::isEquals(TileType o, TileType type) {
+    return o > type && (o < type + 10);
+}

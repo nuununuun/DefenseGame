@@ -1,7 +1,16 @@
 #pragma once
 
-#include<WinSock2.h>
+#ifdef _WIN32
+#include <winsock2.h>
+#else
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>  
+#include <unistd.h>
 
+typedef int SOCKET;
+
+#endif
 #include<functional>
 #include<map>
 #include<thread>
@@ -27,7 +36,6 @@ private:
 	std::thread tHear;
 	std::thread tConnect;
 
-	WSADATA     wsaData;
 	SOCKET      hSocket;
-	SOCKADDR_IN servAddr;
+	sockaddr_in servAddr;
 };

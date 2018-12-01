@@ -22,6 +22,10 @@ bool DefenseScene::init() {
     menuLayer = Layer::create();
     addChild(menuLayer);
     
+    towerPreview = Sprite::create("res/tower1.png");
+    towerPreview->setVisible(false);
+    addChild(towerPreview);
+    
     for (int i = 0; i < 8; i++) {
         auto sample = Sprite::create("res/tower1.png");
         sample->setPosition(Vec2(96, i * 64 + 48));
@@ -45,18 +49,49 @@ void DefenseScene::onMouseDown(cocos2d::EventMouse *e) {
     }
     
     if (selectedSample != nullptr) {
-        selectedSample->runAction(Sequence::create(ScaleTo::create(0.1, 1.2), ScaleTo::create(0.1, 1), nullptr));
+        towerPreview->setPosition(e->getLocationInView());
+        towerPreview->setVisible(true);
     }
 }
 
 void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
     MainScene::onMouseUp(e);
     
+    if (selectedSample != nullptr) {
+        towerPreview->setVisible(false);
+        
+        auto gp = getGridPosition(e->getLocationInView());
+        if (mapData.isOutOfIndex(gp)) return;
+        
+        auto data = mapData.getTileData(gp.x, gp.y);
+        if (mapData.isEquals(data, TileType::EMPTY)) {
+            auto tower = Tower::create();
+            tower->setPosition(getRealPosition(gp));
+            addChild(tower);
+            int type = (int)TileType::SETABLE + 1;
+            mapData.setTileData(gp.x, gp.y, (TileType)type);
+        }
+    }
+    
     selectedSample = nullptr;
 }
 
 void DefenseScene::onMouseMove(cocos2d::EventMouse *e) {
     MainScene::onMouseMove(e);
+    
+    if (selectedSample != nullptr) {
+        towerPreview->setPosition(e->getLocationInView());
+        
+        auto gp = getGridPosition(e->getLocationInView());
+        if (mapData.isOutOfIndex(gp)) return;
+        
+        auto data = mapData.getTileData(gp.x, gp.y);
+        if (!mapData.isEquals(data, TileType::EMPTY)) {
+            towerPreview->setColor(Color3B::RED);
+        } else {
+            towerPreview->setColor(Color3B::WHITE);
+        }
+    }
 }
 
 void DefenseScene::update(float dt) {

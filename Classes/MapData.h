@@ -28,6 +28,9 @@ public:
     
     cocos2d::Vec2 getTargetPosition();
     
+    bool isOutOfIndex(const cocos2d::Vec2 &pos);
+    bool isEquals(TileType o, TileType type);
+    
     void updatePathData();
     std::vector<std::vector<int> > &getPathData();
     

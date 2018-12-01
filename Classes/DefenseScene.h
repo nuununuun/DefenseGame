@@ -31,6 +31,7 @@ public:
     cocos2d::Layer *menuLayer;
     std::vector<cocos2d::Sprite *> towerSamples;
     cocos2d::Node *selectedSample;
+    cocos2d::Sprite *towerPreview;
     
     bool isMouseDown = false;
     
