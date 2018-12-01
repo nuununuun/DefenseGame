@@ -13,6 +13,8 @@
 #include "Tower.hpp"
 #include "network/SocketIO.h"
 
+#include "OffenseUnit.h"
+
 using namespace cocos2d::network;
 
 class DefenseScene : public MainScene {
@@ -30,8 +32,15 @@ public:
     
     void drawTowerRange(const cocos2d::Vec2 &gp);
     bool isAbleTower(const cocos2d::Vec2 &gp);
+
+    void addFlyingEye();
+    void addBaby();
+    void addFinger();
+    void addHeart();
+    void addRib();
     
-    virtual void onConnect(SIOClient* client) override;
+    void setFirstPosition(cocos2d::Sprite* sprite);    
+    void selfRemover(cocos2d::Node* sender);
     
     CREATE_FUNC(DefenseScene);
     

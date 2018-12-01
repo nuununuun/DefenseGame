@@ -115,16 +115,16 @@ void OffenseScene::onMouseDown(cocos2d::EventMouse *e) {
 		addHeart();
         client->emit("summon", "3");
     }
-	if (interfaceFist->getBoundingBox().containsPoint(e->getLocationInView()))
+    if (interfaceFist->getBoundingBox().containsPoint(e->getLocationInView())) {
 		addFist();
         client->emit("summon", "4");
     }
-    if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView())) {
-		addRib();
-	if (interfaceTooth->getBoundingBox().containsPoint(e->getLocationInView()))
-		addTooth();
-	if (interfaceCaecum->getBoundingBox().containsPoint(e->getLocationInView()))
-		addCaecum();
+//    if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView()))
+//        addRib();
+//    if (interfaceTooth->getBoundingBox().containsPoint(e->getLocationInView()))
+//        addTooth();
+//    if (interfaceCaecum->getBoundingBox().containsPoint(e->getLocationInView()))
+//        addCaecum();
 
 
 	mPtShoot = e->getLocationInView();
@@ -634,7 +634,7 @@ void OffenseScene::addTooth()
 
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteTooth;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
@@ -690,7 +690,7 @@ void OffenseScene::addCaecum()
 
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteCaecum;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);
@@ -746,7 +746,7 @@ void OffenseScene::addFist()
 
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteFist;
-	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->body->setTag(0);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
 	unit->setEnergy(2);

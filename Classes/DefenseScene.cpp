@@ -44,17 +44,6 @@ bool DefenseScene::init() {
     return true;
 }
 
-void DefenseScene::onConnect(cocos2d::network::SIOClient *c) {
-    client->emit("defense", "");
-    client->on("summon", [=](SIOClient *c, const std::string &data) {
-        if (data == "0") addFlyingEye();
-        if (data == "1") addBaby();
-        if (data == "2") addFinger();
-        if (data == "3") addHeart();
-        if (data == "4") addRib();
-    });
-}
-
 void DefenseScene::onMouseDown(cocos2d::EventMouse *e) {
     MainScene::onMouseDown(e);
     

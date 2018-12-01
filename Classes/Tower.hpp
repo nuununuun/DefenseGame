@@ -12,8 +12,11 @@
 
 class Tower : public cocos2d::Sprite {
 public:
-    static Tower *create(int dir);
-        bool init(int dir);
+    enum TowerType { ARROW, FLAME, LASER, SLOW, DEALT, BOMB, PRISON, BARRICADE };
+    enum { PATH, OBSTACLE };
+
+    static Tower *create(int dir, TowerType type);
+    bool init(int dir, TowerType type);
     
     void setVisibleRange();
     void setInvisibleRange();
