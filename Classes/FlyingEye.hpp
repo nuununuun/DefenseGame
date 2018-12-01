@@ -3,14 +3,18 @@
 
 #include "cocos2d.h"
 
-class FlyingEye : public cocos2d::Sprite
+class MainScene;
+class FlyingEye
 {
 public:
+	FlyingEye();
 	static FlyingEye* create();
 	bool init();
 
+	void addSelf(MainScene *parent);
 	void selfRemover(cocos2d::Node* sender);
 private:
+	cocos2d::Sprite *sprite;
 	int attackDamage = 2;
 	int health = 2;
 	int speed = 4;

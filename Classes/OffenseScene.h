@@ -2,6 +2,7 @@
 #define OFFENSE_SCENE_H_
 
 #include "MainScene.h"
+#include "cocos2d.h"
 #include <vector>
 
 class OffenseScene : public MainScene {
@@ -12,6 +13,15 @@ public:
 	void onMouseUp(cocos2d::EventMouse *e) override;
 	void onMouseMove(cocos2d::EventMouse *e) override;
 
+	void addFlyingEye();
+	void addBaby();
+	void addFinger();
+	void addHeart();
+	void addRib();
+
+	void setFirstPosition(cocos2d::Sprite* sprite);
+
+	void selfRemover(cocos2d::Node* sender);
 	void update(float dt);
 
 	CREATE_FUNC(OffenseScene);
@@ -21,17 +31,23 @@ public:
 
 
 	cocos2d::Vec2 mouseDownPosition;
-
 	cocos2d::Layer *menuLayer;
-	std::vector<cocos2d::Sprite *>interfaceUnit;
-	/*
-	cocos2d::Layer *menuLayer;
-	std::vector<cocos2d::Sprite *> towerSamples;
-	std::vector<Tower *> towers;
-	cocos2d::Node *selectedSample;
-	cocos2d::Sprite *towerPreview;
-	*/
 	bool isMouseDown = false;
+private:
+	cocos2d::Sprite *interfaceFlyingEye;
+	cocos2d::Sprite *spriteFlyingEye;
+
+	cocos2d::Sprite *interfaceBaby;
+	cocos2d::Sprite *spriteBaby;
+
+	cocos2d::Sprite *interfaceFinger;
+	cocos2d::Sprite *spriteFinger;
+
+	cocos2d::Sprite *interfaceHeart;
+	cocos2d::Sprite *spriteHeart;
+
+	cocos2d::Sprite *interfaceRib;
+	cocos2d::Sprite *spriteRib;
 };
 
 #endif

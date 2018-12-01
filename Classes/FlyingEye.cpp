@@ -3,26 +3,32 @@
 
 USING_NS_CC;
 
+/*
 FlyingEye * FlyingEye::create()
 {
 	auto ret = new (std::nothrow) FlyingEye();
-	if (ret && ret->init()) {
+	if (ret && ret->init()) {	
 		ret->autorelease();
 	}
 	else CC_SAFE_DELETE(ret);
 
 	return ret;
 }
+*/
+
+FlyingEye::FlyingEye()
+{
+	init();
+}
 
 bool FlyingEye::init()
 {
-	if (!Sprite::initWithFile("res/Flying_eye_R.png", Rect(0, 0, 32, 32)))
-		return false;
+	sprite = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
+
+	return true;
 }
 
-
-/*
-void FlyingEye::addSelf()
+void FlyingEye::addSelf(MainScene *parent)
 {
 	Size winSize = Director::getInstance()->getWinSize();
 
@@ -38,15 +44,15 @@ void FlyingEye::addSelf()
 
 	//auto spriteFlying_eye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
 	//setFirstPosition(spriteFlying_eye);
-	parentScene->addChild(this);
+	parent->addChild(sprite);
 
-	Vec2 entryPos = parentScene->getGridPosition(this->getPosition());
-	std::vector<Vec2> path = parentScene->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+	Vec2 entryPos = parent->getGridPosition(sprite->getPosition());
+	std::vector<Vec2> path = parent->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
 
 	Vector<FiniteTimeAction*> moves;
 	for (int i = 0; i < path.size(); i++)
 	{
-		MoveTo* moveTo = MoveTo::create(0.5f, parentScene->getRealPosition(path[i]));
+		MoveTo* moveTo = MoveTo::create(0.5f, parent->getRealPosition(path[i]));
 		moves.pushBack(moveTo);
 	}
 
@@ -62,10 +68,10 @@ void FlyingEye::addSelf()
 	auto animateReapeat = RepeatForever::create(animate);
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
-	this->runAction(act);
+	sprite->runAction(act);
 	//addUnit(spriteFlying_eye);
 }
-*/
+
 void FlyingEye::selfRemover(Node* sender)
 {
 	sender->removeFromParentAndCleanup(true);
