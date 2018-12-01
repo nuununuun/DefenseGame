@@ -62,27 +62,29 @@ bool TitleScene::init() {
     
     defenseText->setCallback([&] (Ref *r) {
         dScene = DefenseScene::create();
+        dScene->retain();
         auto client = SocketIO::connect("http://10.10.0.66:8080", *dScene);
         dScene->client = client;
-        client->emit("defense", "");
-        client->on("connect", [&](SIOClient *c, const std::string &data){
+        client->on("connect", [=](SIOClient *c, const std::string &data) {
             client->emit("defense", "");
-            client->on("summon", [&](SIOClient *c, const std::string &data) {
+            client->on("summon", [=](SIOClient *c, const std::string &data) {
                 if (data == "\"0\"") dScene->addFlyingEye();
                 if (data == "\"1\"") dScene->addBaby();
                 if (data == "\"2\"") dScene->addFinger();
                 if (data == "\"3\"") dScene->addHeart();
                 if (data == "\"4\"") dScene->addRib();
             });
-			client->on("game-ready", [&](SIOClient *c, const std::string &data) {
-				auto moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
-				auto actionInterval = EaseExponentialIn::create(moveTo);
-				Sequence* sequence = Sequence::create(actionInterval, CallFunc::create([&] {Director::getInstance()->replaceScene(dScene); }), NULL);
-				left->runAction(sequence);
-				moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
-				actionInterval = EaseExponentialIn::create(moveTo);
-				right->runAction(actionInterval);
-			});
+            client->on("game-ready", [&](SIOClient *c, const std::string &data) {
+                auto moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
+                auto actionInterval = EaseExponentialIn::create(moveTo);
+                Sequence *sequence = Sequence::create(actionInterval, CallFunc::create([&] {
+                    Director::getInstance()->replaceScene(dScene);
+                }), NULL);
+                left->runAction(sequence);
+                moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
+                actionInterval = EaseExponentialIn::create(moveTo);
+                right->runAction(actionInterval);
+            });
         });
     });
     
@@ -90,8 +92,7 @@ bool TitleScene::init() {
         auto scene = OffenseScene::create();
         auto client = SocketIO::connect("http://10.10.0.66:8080", *scene);
         scene->client = client;
-        client->emit("offense", "");
-        client->on("connect", [=](SIOClient *c, const std::string &data){
+        client->on("connect", [=](SIOClient *c, const std::string &data) {
             client->emit("offense", "");
 			client->on("build", [=](SIOClient *c, const std::string &data) {
 				//if (data == "\"0\"") scene->addFlyingEye();
