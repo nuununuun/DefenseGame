@@ -7,7 +7,6 @@
 
 #ifdef _WIN32
 
-//#include <winsock2.h>
 #include <WS2tcpip.h>
 
 #pragma comment(lib, "wsock32.lib")
@@ -35,7 +34,7 @@ SocketClient::SocketClient(std::string ip, short port)
 #endif
 	hSocket = socket(PF_INET, SOCK_STREAM, 0);
 
-	if (hSocket == INVALID_SOCKET)
+	if (hSocket < 0)
 		ErrorHandling("hSocket() error!");
 
 	memset(&servAddr, 0, sizeof(servAddr));
@@ -50,7 +49,7 @@ void SocketClient::connectServer(std::function<void(bool)> callback)
 	connectCallback = callback;
 	tConnect = std::thread([&]() {
 		bool connect_try = true;
-		if (connect(hSocket, (SOCKADDR*)&servAddr, sizeof(servAddr)) == SOCKET_ERROR)
+		if (connect(hSocket, (SOCKADDR*)&servAddr, sizeof(servAddr)) == -1)
 			connect_try = false;
 		connectCallback(connect);
 		closed = false;
