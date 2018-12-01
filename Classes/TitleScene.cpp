@@ -7,6 +7,9 @@
 
 #include "TitleScene.hpp"
 
+#include "DefenseScene.h"
+#include "OffenseScene.h"
+
 USING_NS_CC;
 using namespace cocos2d::network;
 
@@ -19,14 +22,21 @@ bool TitleScene::init() {
     menu->alignItemsHorizontally();
     addChild(menu);
     
-//    SocketIO::connect("http://10.10.0.66:8080", );
     
     defenseText->setCallback([&] (Ref *r) {
-        
+        auto scene = DefenseScene::create();
+        auto client = SocketIO::connect("http://10.10.0.66:8080", *scene);
+        scene->client = client;
+        client->emit("defense", "");
+        Director::getInstance()->replaceScene(scene);
     });
     
     offenseText->setCallback([&] (Ref *r) {
-        
+        auto scene = OffenseScene::create();
+        auto client = SocketIO::connect("http://10.10.0.66:8080", *scene);
+        scene->client = client;
+        client->emit("offense", "");
+        Director::getInstance()->replaceScene(scene);
     });
     
     return true;

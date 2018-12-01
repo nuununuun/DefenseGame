@@ -23,7 +23,9 @@ public:
 	void addFinger();
 	void addHeart();
 	void addRib();
-
+	void addTooth();
+	void addCaecum();
+	void addFist();
 	void setFirstPosition(cocos2d::Sprite* sprite);
 
 	void selfRemover(cocos2d::Node* sender);
@@ -54,6 +56,12 @@ private:
 
 	cocos2d::Sprite *interfaceRib;
 	//cocos2d::Sprite *spriteRib;
+
+	cocos2d::Sprite *interfaceTooth;
+
+	cocos2d::Sprite *interfaceCaecum;
+
+	cocos2d::Sprite *interfaceFist;
 
 	void addShootFire(cocos2d::Point pt);
 	void weaponRemover(Node* sender);

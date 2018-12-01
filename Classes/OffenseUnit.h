@@ -6,8 +6,7 @@
 enum UNIT_TYPE {
 	RUSH = 0,
 	HEALTH,
-	SELF_DESTRUCT,
-
+	SELF_DESTRUCT
 };
 
 class OffenseUnit
@@ -18,12 +17,7 @@ public:
     
     void setEnergy(float max);
     float subEnergy(float damage);
-
     void release();
-
-
-	//int damage;
-
     
     cocos2d::Sprite* body;
     

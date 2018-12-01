@@ -10,31 +10,62 @@ bool OffenseScene::init() {
 	addChild(menuLayer);
 
 	//sample->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (j + 1), i * 64 + 72));
-
+	//setPosition(Vec2(967 + j * 98, 118 + i * 98));
 	interfaceFlyingEye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
-	interfaceFlyingEye->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 0 * 64 + 72));
+	interfaceFlyingEye->getTexture()->setAliasTexParameters();
+	interfaceFlyingEye->setPosition(Vec2(967 + 0 * 98, 118 + 0 * 98));
+	interfaceFlyingEye->setGlobalZOrder(1001);
 	interfaceFlyingEye->setScale(1.5f);
 	menuLayer->addChild(interfaceFlyingEye);
 
 	interfaceBaby = Sprite::create("res/Baby_R.png", Rect(0, 0, 32, 32));
-	interfaceBaby->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 1 * 64 + 72));
+	interfaceBaby->getTexture()->setAliasTexParameters();
+	interfaceBaby->setPosition(Vec2(967 + 1 * 98, 118 + 0 * 98));
+	interfaceBaby->setGlobalZOrder(1001);
 	interfaceBaby->setScale(1.5f);
 	menuLayer->addChild(interfaceBaby);
 
 	interfaceFinger = Sprite::create("res/Finger_R.png", Rect(0, 0, 32, 32));
-	interfaceFinger->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 2 * 64 + 72));
+	interfaceFinger->getTexture()->setAliasTexParameters();
+	interfaceFinger->setPosition(Vec2(967 + 0 * 98, 118 + 1 * 98));
+	interfaceFinger->setGlobalZOrder(1001);
 	interfaceFinger->setScale(1.5f);
 	menuLayer->addChild(interfaceFinger);
 
 	interfaceHeart = Sprite::create("res/Heart_R.png", Rect(0, 0, 32, 32));
-	interfaceHeart->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (0 + 1), 3 * 64 + 72));
+	interfaceHeart->getTexture()->setAliasTexParameters();
+	interfaceHeart->setPosition(Vec2(967 + 1 * 98, 118 + 1 * 98));
+	interfaceHeart->setGlobalZOrder(1001);
 	interfaceHeart->setScale(1.5f);
 	menuLayer->addChild(interfaceHeart);
 
-	interfaceRib = Sprite::create("res/Rib_R.png", Rect(0, 0, 32, 32));
-	interfaceRib->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (1 + 1), 0 * 64 + 72));
+	interfaceRib = Sprite::create("res/Rib_D.png", Rect(0, 0, 32, 32));
+	interfaceRib->getTexture()->setAliasTexParameters();
+	interfaceRib->setPosition(Vec2(967 + 0 * 98, 118 + 2 * 98));
+	interfaceRib->setGlobalZOrder(1001);
 	interfaceRib->setScale(1.5f);
 	menuLayer->addChild(interfaceRib);
+
+	interfaceTooth = Sprite::create("res/Tooth_D.png", Rect(0, 0, 32, 32));
+	interfaceTooth->getTexture()->setAliasTexParameters();
+	interfaceTooth->setPosition(Vec2(967 + 1 * 98, 118 + 2 * 98));
+	interfaceTooth->setGlobalZOrder(1001);
+	interfaceTooth->setScale(1.5f);
+	menuLayer->addChild(interfaceTooth);
+
+	interfaceCaecum = Sprite::create("res/Caecum_R.png", Rect(0, 0, 32, 32));
+	interfaceCaecum->getTexture()->setAliasTexParameters();
+	interfaceCaecum->setPosition(Vec2(967 + 0 * 98, 118 + 3 * 98));
+	interfaceCaecum->setGlobalZOrder(1001);
+	interfaceCaecum->setScale(1.5f);
+	menuLayer->addChild(interfaceCaecum);
+
+	interfaceFist = Sprite::create("res/Fist_R.png", Rect(0, 0, 32, 32));
+	interfaceFist->getTexture()->setAliasTexParameters();
+	interfaceFist->setPosition(Vec2(967 + 1 * 98, 118 + 3 * 98));
+	interfaceFist->setGlobalZOrder(1001);
+	interfaceFist->setScale(1.5f);
+	menuLayer->addChild(interfaceFist);
 
 	//interfaceUnits.push_back(interfaceFlyingEye);
 	scheduleUpdate();
@@ -62,6 +93,12 @@ void OffenseScene::onMouseDown(cocos2d::EventMouse *e) {
 		addHeart();
 	if (interfaceRib->getBoundingBox().containsPoint(e->getLocationInView()))
 		addRib();
+	if (interfaceTooth->getBoundingBox().containsPoint(e->getLocationInView()))
+		addTooth();
+	if (interfaceCaecum->getBoundingBox().containsPoint(e->getLocationInView()))
+		addCaecum();
+	if (interfaceFist->getBoundingBox().containsPoint(e->getLocationInView()))
+		addFist();
 
 	mPtShoot = e->getLocationInView();
 	mIsShoot = true;
@@ -178,17 +215,18 @@ void OffenseScene::IsCollision(float dt)
 				u->curEnergy -= 1.0f;
 				if (u->curEnergy <= 0)
 				{
-					auto textureFlying_eye = Sprite::create("res/boom.png")->getTexture();
+					auto textureFlying_eye = Sprite::create("res/Blood_boom.png")->getTexture();
 
 					Animation* animation = Animation::create();
-					animation->setDelayPerUnit(0.1f);
+					animation->setDelayPerUnit(0.05f);
 
-					for (int i = 0; i < 11; i++)
+					for (int i = 0; i < 21; i++)
 						animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(48 * i, 0, 48, 48));
 
 					Animate* animate = Animate::create(animation);
 
-					auto sprite = Sprite::create("res/boom.png", Rect(0, 0, 48, 48));
+					auto sprite = Sprite::create("res/Blood_boom.png", Rect(0, 0, 48, 48));
+					sprite->getTexture()->setAliasTexParameters();
 					sprite->setScale(1.5f);
 					//setFirstPosition(spriteFlyingEye);
 					sprite->setPosition(u->body->getPosition());
@@ -280,6 +318,7 @@ void OffenseScene::addFlyingEye()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteFlyingEye->runAction(act);
+	spriteFlyingEye->getTexture()->setAliasTexParameters();
 
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteFlyingEye;
@@ -333,7 +372,8 @@ void OffenseScene::addBaby()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteBaby->runAction(act);
-	
+	spriteBaby->getTexture()->setAliasTexParameters();
+
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteBaby;
 	unit->body->setTag(TAG_TYPE_OFFENSE);
@@ -349,7 +389,7 @@ void OffenseScene::addFinger()
 	Size winSize = Director::getInstance()->getWinSize();
 
 	auto textureFlying_eye = Sprite::create("res/Finger_R.png")->getTexture();
-
+	
 	Animation* animation = Animation::create();
 	animation->setDelayPerUnit(0.3f);
 
@@ -386,7 +426,8 @@ void OffenseScene::addFinger()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteFinger->runAction(act);
-	
+	spriteFinger->getTexture()->setAliasTexParameters();
+
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteFinger;
 	unit->body->setTag(TAG_TYPE_OFFENSE);
@@ -439,7 +480,8 @@ void OffenseScene::addHeart()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteHeart->runAction(act);
-	
+	spriteHeart->getTexture()->setAliasTexParameters();
+
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteHeart;
 	unit->body->setTag(TAG_TYPE_OFFENSE);
@@ -492,9 +534,172 @@ void OffenseScene::addRib()
 	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
 
 	spriteRib->runAction(act);
-	
+	spriteRib->getTexture()->setAliasTexParameters();
+
 	OffenseUnit *unit = new OffenseUnit();
 	unit->body = spriteRib;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(2);
+
+	offenseUnits.push_back(unit);
+}
+
+void OffenseScene::addTooth()
+{
+	Size winSize = Director::getInstance()->getWinSize();
+
+	auto textureFlying_eye = Sprite::create("res/Tooth_D.png")->getTexture();
+
+	Animation* animation = Animation::create();
+	animation->setDelayPerUnit(0.2f);
+
+	for (int i = 0; i < 8; i++)
+		animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
+
+	Animate* animate = Animate::create(animation);
+
+	auto spriteTooth = Sprite::create("res/Tooth_D.png", Rect(0, 0, 32, 32));
+	spriteTooth->setScale(1.5f);
+	setFirstPosition(spriteTooth);
+	this->addChild(spriteTooth);
+
+	Vec2 entryPos = this->getGridPosition(spriteTooth->getPosition());
+	std::vector<Vec2> path = this->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+
+	Vector<FiniteTimeAction*> moves;
+	for (int i = 0; i < path.size(); i++)
+	{
+		MoveTo* moveTo = MoveTo::create(0.5f, this->getRealPosition(path[i]));
+		moves.pushBack(moveTo);
+	}
+
+	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseScene::selfRemover, this));
+	moves.pushBack(callfunc);
+
+	auto moveSeq = Sequence::create(moves);
+	//Vector<FiniteTimeAction*> actions;
+	//actions.pushBack(moveSeq);
+	//actions.pushBack(animateReapeat);
+	//actions.pushBack(callfunc);
+
+	auto animateReapeat = RepeatForever::create(animate);
+	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
+
+	spriteTooth->runAction(act);
+	spriteTooth->getTexture()->setAliasTexParameters();
+
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteTooth;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(2);
+
+	offenseUnits.push_back(unit);
+}
+
+void OffenseScene::addCaecum()
+{
+	Size winSize = Director::getInstance()->getWinSize();
+
+	auto textureFlying_eye = Sprite::create("res/Caecum_R.png")->getTexture();
+
+	Animation* animation = Animation::create();
+	animation->setDelayPerUnit(0.1f);
+
+	for (int i = 0; i < 8; i++)
+		animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
+
+	Animate* animate = Animate::create(animation);
+
+	auto spriteCaecum = Sprite::create("res/Caecum_R.png", Rect(0, 0, 32, 32));
+	spriteCaecum->setScale(1.5f);
+	setFirstPosition(spriteCaecum);
+	this->addChild(spriteCaecum);
+
+	Vec2 entryPos = this->getGridPosition(spriteCaecum->getPosition());
+	std::vector<Vec2> path = this->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+
+	Vector<FiniteTimeAction*> moves;
+	for (int i = 0; i < path.size(); i++)
+	{
+		MoveTo* moveTo = MoveTo::create(0.5f, this->getRealPosition(path[i]));
+		moves.pushBack(moveTo);
+	}
+
+	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseScene::selfRemover, this));
+	moves.pushBack(callfunc);
+
+	auto moveSeq = Sequence::create(moves);
+	//Vector<FiniteTimeAction*> actions;
+	//actions.pushBack(moveSeq);
+	//actions.pushBack(animateReapeat);
+	//actions.pushBack(callfunc);
+
+	auto animateReapeat = RepeatForever::create(animate);
+	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
+
+	spriteCaecum->runAction(act);
+	spriteCaecum->getTexture()->setAliasTexParameters();
+
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteCaecum;
+	unit->body->setTag(TAG_TYPE_OFFENSE);
+	unit->isEnermy = true;
+	unit->eUnitType = RUSH;
+	unit->setEnergy(2);
+
+	offenseUnits.push_back(unit);
+}
+
+void OffenseScene::addFist()
+{
+	Size winSize = Director::getInstance()->getWinSize();
+
+	auto textureFlying_eye = Sprite::create("res/Fist_R.png")->getTexture();
+
+	Animation* animation = Animation::create();
+	animation->setDelayPerUnit(0.3f);
+
+	for (int i = 0; i < 4; i++)
+		animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
+
+	Animate* animate = Animate::create(animation);
+
+	auto spriteFist = Sprite::create("res/Fist_R.png", Rect(0, 0, 32, 32));
+	spriteFist->setScale(1.5f);
+	setFirstPosition(spriteFist);
+	this->addChild(spriteFist);
+
+	Vec2 entryPos = this->getGridPosition(spriteFist->getPosition());
+	std::vector<Vec2> path = this->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+
+	Vector<FiniteTimeAction*> moves;
+	for (int i = 0; i < path.size(); i++)
+	{
+		MoveTo* moveTo = MoveTo::create(0.5f, this->getRealPosition(path[i]));
+		moves.pushBack(moveTo);
+	}
+
+	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseScene::selfRemover, this));
+	moves.pushBack(callfunc);
+
+	auto moveSeq = Sequence::create(moves);
+	//Vector<FiniteTimeAction*> actions;
+	//actions.pushBack(moveSeq);
+	//actions.pushBack(animateReapeat);
+	//actions.pushBack(callfunc);
+
+	auto animateReapeat = RepeatForever::create(animate);
+	auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
+
+	spriteFist->runAction(act);
+	spriteFist->getTexture()->setAliasTexParameters();
+
+	OffenseUnit *unit = new OffenseUnit();
+	unit->body = spriteFist;
 	unit->body->setTag(TAG_TYPE_OFFENSE);
 	unit->isEnermy = true;
 	unit->eUnitType = RUSH;
