@@ -1,4 +1,4 @@
-//
+	//
 //  DefenseScene.cpp
 //  DefenseGame
 //
@@ -38,8 +38,8 @@ bool DefenseScene::init() {
             towerSamples.push_back(sample);
         }
     }
-    
-    scheduleUpdate();
+
+	scheduleUpdate();
     
     return true;
 }
@@ -406,7 +406,7 @@ void DefenseScene::addHeart()
         animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
     
     Animate* animate = Animate::create(animation);
-    
+     
     auto spriteHeart = Sprite::create("res/Heart_R.png", Rect(0, 0, 32, 32));
     spriteHeart->setScale(1.5f);
     setFirstPosition(spriteHeart);
