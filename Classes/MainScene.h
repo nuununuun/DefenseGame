@@ -12,18 +12,22 @@
 #include "MapData.h"
 #include "OffenseInterface.h"
 
+#include "PathFinding.h"
+
 class MainScene : public cocos2d::Scene {
 public:
     virtual bool init();
     
     void initializeMap();
-    
-	void onEnter();
-	void onExit();
 
     CREATE_FUNC(MainScene);
     
-    virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    virtual void onMouseDown(cocos2d::EventMouse *e);
+    virtual void onMouseUp(cocos2d::EventMouse *e);
+    virtual void onMouseMove(cocos2d::EventMouse *e);
+    
+    cocos2d::Vec2 getGridPosition(const cocos2d::Vec2 &rp);
+//    cocos2d::Vec2 getRealPosition(const cocos2d::Vec2 &gp);
     
 // non cocos object
 private:
@@ -39,6 +43,10 @@ private:
     cocos2d::DrawNode *debugPathDraw;
   
 	OffenseInterface* offenseInterface;
+    pathfinding::PathFinding *pathFinder;
+    
+    cocos2d::EventListenerMouse *mouseListener;
+    
 };
 
 #endif /* MainScene_h */

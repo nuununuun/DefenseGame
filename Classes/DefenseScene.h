@@ -14,10 +14,14 @@ class DefenseScene : public MainScene {
 public:
     bool init();
     
+    void onMouseDown(cocos2d::EventMouse *e) override;
+    void onMouseUp(cocos2d::EventMouse *e) override;
+    void onMouseMove(cocos2d::EventMouse *e) override;
+    
     CREATE_FUNC(DefenseScene);
     
 public:
-    cocos2d::EventListenerTouchAllAtOnce
+    
     
 };
 

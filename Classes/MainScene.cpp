@@ -8,13 +8,13 @@
 #include "MainScene.h"
 #include "OffenseInterface.h"
 
-#include "PathFinding.h"
+#include "Tower.hpp"
 
 USING_NS_CC;
 using namespace std;
 
 bool MainScene::init() {
-    tileSize = 32.0f;
+    tileSize = 48.0f;
     
     mapData = MapData("data/map1.dat");
     
@@ -26,17 +26,15 @@ bool MainScene::init() {
     
     initializeMap();
     
-    auto pathFinder = pathfinding::PathFinding::create();
+    pathFinder = pathfinding::PathFinding::create();
+    pathFinder->retain();
     pathFinder->setupMap(mapData.getPathData());
     
-    debugPathDraw = DrawNode::create(4);
-    auto path = pathFinder->getShortestPath(Vec2(0, 0), mapData.getTargetPosition());
-    for (int i = 0; i < path.size() - 1; i++) {
-        Vec2 src = -Vec2(mapData.width, mapData.height) * tileSize * 0.5f + path[i] * tileSize + Vec2(tileSize, tileSize) * 0.5f;
-        Vec2 dst = -Vec2(mapData.width, mapData.height) * tileSize * 0.5f + path[i + 1] * tileSize + Vec2(tileSize, tileSize) * 0.5f;
-        debugPathDraw->drawLine(src, dst, Color4F::MAGENTA);
-    }
-    mapLayer->addChild(debugPathDraw);
+    mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(MainScene::onMouseDown, this);
+    mouseListener->onMouseUp = CC_CALLBACK_1(MainScene::onMouseUp, this);
+    mouseListener->onMouseMove = CC_CALLBACK_1(MainScene::onMouseMove, this);
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, this);
     
 	/* when you offenser */
 	offenseInterface = new OffenseInterface();
@@ -49,7 +47,7 @@ void MainScene::initializeMap() {
     auto size = Director::getInstance()->getVisibleSize();
     Vec2 origin = size / 2;
     
-    int width = mapData.width, height = mapData.height;
+    width = mapData.width, height = mapData.height;
 
     mapLayer = Layer::create();
     mapLayer->setPosition(origin);
@@ -74,34 +72,27 @@ void MainScene::initializeMap() {
     }
 }
 
-void MainScene::onEnter()
-{
-	Scene::onEnter();
+//bool MainScene::onTouchBegan(Touch* touch, Event* event)
+//{
+//    offenseInterface->onTouchBegan(touch, event);
+//    return true;
+//}
 
-	auto listener = EventListenerTouchOneByOne::create();
-
-	listener->setSwallowTouches(true);
-
-	listener->onTouchBegan = 
-		CC_CALLBACK_2(MainScene::onTouchBegan, this);
-	/*
-	listener->onTouchMoved =
-		CC_CALLBACK_2(OffenseInterface::onTouchMoved, this);
-
-	listener->onTouchEnded =
-		CC_CALLBACK_2(OffenseInterface::onTouchEnded, this);
-	*/
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+void MainScene::onMouseDown(EventMouse *e) {
 }
 
-void MainScene::onExit()
-{
-	_eventDispatcher->removeAllEventListeners();
-	Scene::onExit();
+void MainScene::onMouseUp(EventMouse *e) {
 }
 
-bool MainScene::onTouchBegan(Touch* touch, Event* event)
-{
-	offenseInterface->onTouchBegan(touch, event);
-	return true;
+void MainScene::onMouseMove(EventMouse *e) {
 }
+
+Vec2 MainScene::getGridPosition(const Vec2 &rp) {
+    auto p = mapLayer->convertToNodeSpace(rp);
+    return Vec2(int((p.x + width * tileSize * 0.5f) / tileSize), int((p.y + height * tileSize * 0.5f) / tileSize));
+}
+
+//Vec2 MainScene::getRealPosition(const cocos2d::Vec2 &gp) {
+//    auto p = gp * tileSize;
+//    return p;//Vec2(int((p.x + width * tileSize * 0.5f) / tileSize), int((p.y + height * tileSize * 0.5f) / tileSize));
+//}
