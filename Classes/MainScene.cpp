@@ -7,6 +7,7 @@
 
 #include "MainScene.h"
 #include "OffenseInterface.h"
+#include "Constant.h"
 
 #include "Tower.hpp"
 
@@ -37,8 +38,10 @@ bool MainScene::init() {
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, this);
     
 	/* when you offenser */
-	offenseInterface = new OffenseInterface();
-	offenseInterface->init(this);
+	offenseInterface = OffenseInterface::create(this);
+	addChild(offenseInterface);
+
+	offenseInterface->addKenny(0.1f);
 
     return true;
 }

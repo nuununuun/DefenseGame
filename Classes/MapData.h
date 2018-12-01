@@ -8,6 +8,7 @@
 #ifndef MapData_h
 #define MapData_h
 
+#include "cocos2d.h"
 #include <vector>
 
 using TileType = enum {
