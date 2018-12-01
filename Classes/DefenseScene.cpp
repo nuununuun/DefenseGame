@@ -28,11 +28,13 @@ bool DefenseScene::init() {
     towerPreview->setVisible(false);
     addChild(towerPreview);
     
-    for (int i = 0; i < 8; i++) {
-        auto sample = Sprite::create("res/tower1.png");
-        sample->setPosition(Vec2(96, i * 64 + 48));
-        menuLayer->addChild(sample);
-        towerSamples.push_back(sample);
+    for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < 4; i++) {
+            auto sample = Sprite::create("res/tower1.png");
+            sample->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (j + 1), i * 64 + 72));
+            menuLayer->addChild(sample);
+            towerSamples.push_back(sample);
+        }
     }
     
     scheduleUpdate();

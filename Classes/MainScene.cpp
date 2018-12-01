@@ -56,7 +56,7 @@ void MainScene::initializeMap() {
     width = mapData.width, height = mapData.height;
 
     mapLayer = Layer::create();
-    mapLayer->setPosition(origin);
+    mapLayer->setPosition(Vec2(width * tileSize * 0.5f + 48, origin.y));
     addChild(mapLayer);
     
     for (int i = 0; i < height; i++) {
@@ -69,6 +69,7 @@ void MainScene::initializeMap() {
             // -타일 맵 전체 사이즈 / 2 + 타일의 현재 위치 + 타일 하나의 사이즈 / 2
             tile->setPosition(-Vec2(width, height) * tileSize * 0.5f + Vec2(j, i) * tileSize + Vec2(tileSize, tileSize) * 0.5f);
             tile->setTextureRect(Rect(x * 48, y * 48, 48, 48));
+            tile->getTexture()->setAliasTexParameters();
             mapLayer->addChild(tile);
             mapTiles.push_back(tile);
             
