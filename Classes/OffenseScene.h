@@ -41,19 +41,19 @@ public:
 
 private:
 	cocos2d::Sprite *interfaceFlyingEye;
-	cocos2d::Sprite *spriteFlyingEye;
+	//cocos2d::Sprite *spriteFlyingEye;
 
 	cocos2d::Sprite *interfaceBaby;
-	cocos2d::Sprite *spriteBaby;
+	//cocos2d::Sprite *spriteBaby;
 
 	cocos2d::Sprite *interfaceFinger;
-	cocos2d::Sprite *spriteFinger;
+	//cocos2d::Sprite *spriteFinger;
 
 	cocos2d::Sprite *interfaceHeart;
-	cocos2d::Sprite *spriteHeart;
+	//cocos2d::Sprite *spriteHeart;
 
 	cocos2d::Sprite *interfaceRib;
-	cocos2d::Sprite *spriteRib;
+	//cocos2d::Sprite *spriteRib;
 
 	void addShootFire(cocos2d::Point pt);
 	void weaponRemover(Node* sender);

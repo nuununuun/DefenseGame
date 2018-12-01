@@ -36,7 +36,7 @@ bool OffenseScene::init() {
 
 	//interfaceUnits.push_back(interfaceFlyingEye);
 	scheduleUpdate();
-	schedule(schedule_selector(OffenseScene::IsCollision));
+	schedule(schedule_selector(OffenseScene::IsCollision), 0.01f);
 	schedule(schedule_selector(OffenseScene::updateCoolTime));
 	return true;
 }
@@ -151,7 +151,7 @@ void OffenseScene::weaponRemover(Node* sender)
 		weapon = nullptr;
 	}
 
-	selfRemover(weapon);
+	weapon->removeFromParentAndCleanup(true);
 }
 
 void OffenseScene::IsCollision(float dt)
@@ -206,7 +206,18 @@ void OffenseScene::setFirstPosition(Sprite* sprite)
 
 void OffenseScene::selfRemover(Node* sender)
 {
-	sender->removeFromParentAndCleanup(true);
+	for (auto iterE = offenseUnits.begin(); iterE != offenseUnits.end(); iterE++)
+	{
+		OffenseUnit* u = (*iterE);
+
+		if (sender == u->body)
+		{
+			sender->removeFromParentAndCleanup(true);
+			u = nullptr;
+			offenseUnits.erase(iterE);
+		}
+		return;
+	}
 }
 
 void OffenseScene::addFlyingEye()
@@ -223,7 +234,7 @@ void OffenseScene::addFlyingEye()
 
 	Animate* animate = Animate::create(animation);
 
-	spriteFlyingEye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
+	auto spriteFlyingEye = Sprite::create("res/Flying_eye_R.png", Rect(0, 0, 32, 32));
 	spriteFlyingEye->setScale(1.5f);
 	setFirstPosition(spriteFlyingEye);
 	this->addChild(spriteFlyingEye);
@@ -276,7 +287,7 @@ void OffenseScene::addBaby()
 
 	Animate* animate = Animate::create(animation);
 
-	spriteBaby = Sprite::create("res/Baby_R.png", Rect(0, 0, 32, 32));
+	auto spriteBaby = Sprite::create("res/Baby_R.png", Rect(0, 0, 32, 32));
 	spriteBaby->setScale(1.5f);
 	setFirstPosition(spriteBaby);
 	this->addChild(spriteBaby);
@@ -329,7 +340,7 @@ void OffenseScene::addFinger()
 
 	Animate* animate = Animate::create(animation);
 
-	spriteFinger = Sprite::create("res/Finger_R.png", Rect(0, 0, 32, 32));
+	auto spriteFinger = Sprite::create("res/Finger_R.png", Rect(0, 0, 32, 32));
 	spriteFinger->setScale(1.5f);
 	setFirstPosition(spriteFinger);
 	this->addChild(spriteFinger);
@@ -382,7 +393,7 @@ void OffenseScene::addHeart()
 
 	Animate* animate = Animate::create(animation);
 
-	spriteHeart = Sprite::create("res/Heart_R.png", Rect(0, 0, 32, 32));
+	auto spriteHeart = Sprite::create("res/Heart_R.png", Rect(0, 0, 32, 32));
 	spriteHeart->setScale(1.5f);
 	setFirstPosition(spriteHeart);
 	this->addChild(spriteHeart);
@@ -435,7 +446,7 @@ void OffenseScene::addRib()
 
 	Animate* animate = Animate::create(animation);
 
-	spriteRib = Sprite::create("res/Rib_R.png", Rect(0, 0, 32, 32));
+	auto spriteRib = Sprite::create("res/Rib_R.png", Rect(0, 0, 32, 32));
 	spriteRib->setScale(1.5f);
 	setFirstPosition(spriteRib);
 	this->addChild(spriteRib);
