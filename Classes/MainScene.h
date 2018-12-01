@@ -14,7 +14,9 @@
 
 #include "PathFinding.h"
 
-class MainScene : public cocos2d::Scene {
+namespace cocos2d::network;
+
+class MainScene : public cocos2d::Scene, public SIODelegate {
 public:
     virtual bool init();
     

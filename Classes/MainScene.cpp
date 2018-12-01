@@ -10,23 +10,14 @@
 #include "Constant.h"
 
 #include "Tower.hpp"
-#include "SocketServer.h"
-#include "SocketClient.h"
+
+#include "network/SocketIO.h"
 
 USING_NS_CC;
 using namespace std;
 
 bool MainScene::init() {
     
-    SocketServer server(7000);
-    server.listenClient([&] {
-        check = true;
-    });
-    
-    SocketClient client("10.10.0.66", 7000);
-    client.connectServer([&] (bool con) {
-        if (con && !check) MessageBox("", "");
-    });
     
     tileSize = 48.0f;
     
