@@ -10,7 +10,6 @@
 
 #include "cocos2d.h"
 #include "MapData.h"
-#include "OffenseInterface.h"
 
 #include "PathFinding.h"
 
@@ -45,6 +44,7 @@ protected:
     std::vector<cocos2d::Sprite *> mapTiles;
     cocos2d::DrawNode *debugPathDraw;
   
+	//OffenseInterface* offenseInterface;
     
     cocos2d::EventListenerMouse *mouseListener;
     
