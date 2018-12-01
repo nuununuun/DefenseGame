@@ -29,15 +29,17 @@ public:
     cocos2d::Vec2 getGridPosition(const cocos2d::Vec2 &rp);
     cocos2d::Vec2 getRealPosition(const cocos2d::Vec2 &gp);
     
+    void updateMap();
+    
 // non cocos object
-private:
+protected:
     int width, height;
     float tileSize;
     
     MapData mapData;
 
 // cocos object
-private:
+protected:
     cocos2d::Layer *mapLayer;
     std::vector<cocos2d::Sprite *> mapTiles;
     cocos2d::DrawNode *debugPathDraw;
