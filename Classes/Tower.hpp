@@ -16,8 +16,19 @@ public:
     
     bool init();
     
+    void setVisibleRange();
+    void setInvisibleRange();
+    
+    void setDirection(int direction);
+    
 public:
-    float range;
+    int range = 2;
+    cocos2d::DrawNode *rangeRenderer;
+    
+    float attackDelay;
+    float damage;
+    
+    int direction;
     
 };
 

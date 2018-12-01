@@ -78,12 +78,27 @@ void MainScene::initializeMap() {
 void MainScene::updateMap() {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            switch (mapData.getTileData(j, i)) {
-                case EMPTY: mapTiles[i * width + j]->setColor(Color3B::WHITE); break;
-                case STARTING: mapTiles[i * width + j]->setColor(Color3B::GREEN); break;
-                case BARRICADE: mapTiles[i * width + j]->setColor(Color3B(100, 50, 50)); break;
-                case CORE: mapTiles[i * width + j]->setColor(Color3B::RED); break;
-                case SETABLE: mapTiles[i * width + j]->setColor(Color3B::GRAY); break;
+            auto data = mapData.getTileData(j, i);
+            if (mapData.isEquals(data, TileType::EMPTY)) {
+                
+                mapTiles[i * width + j]->setColor(Color3B::WHITE);
+                
+            } else if (mapData.isEquals(data, TileType::STARTING)) {
+                
+                mapTiles[i * width + j]->setColor(Color3B::GREEN);
+                
+            } else if (mapData.isEquals(data, TileType::SETABLE)) {
+                
+                mapTiles[i * width + j]->setColor(Color3B(100, 50, 50));
+                
+            } else if (mapData.isEquals(data, TileType::CORE)) {
+                
+                mapTiles[i * width + j]->setColor(Color3B::RED);
+                
+            } else if (mapData.isEquals(data, TileType::BARRICADE)) {
+                
+                mapTiles[i * width + j]->setColor(Color3B::GRAY);
+                
             }
         }
     }

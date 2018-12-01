@@ -29,7 +29,7 @@ MapData::MapData(const string &path) {
         for (int j = 0; j < width; j++) {
             int val;
             input >> val;
-            data[i].push_back(val);
+            data[i].push_back(val * 10);
             pathData[i].push_back(0);
         }
     }
@@ -41,7 +41,7 @@ MapData::MapData(const string &path) {
 void MapData::updatePathData() {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            if (data[i][j] == TileType::SETABLE || data[i][j] == TileType::BARRICADE) pathData[i][j] = 1;
+            if (isEquals((TileType)data[i][j], TileType::SETABLE) || isEquals((TileType)data[i][j], TileType::BARRICADE)) pathData[i][j] = 1;
         }
     }
 }
@@ -77,5 +77,5 @@ bool MapData::isOutOfIndex(const cocos2d::Vec2 &pos) {
 }
 
 bool MapData::isEquals(TileType o, TileType type) {
-    return o > type && (o < type + 10);
+    return o >= type && (o < type + 10);
 }

@@ -30,7 +30,7 @@ bool Unit::init() {
 
 void Unit::onEnter() {
     auto pos = parentScene->getGridPosition(getPosition());
-    path = parentScene->pathFinder->getShortestPath(pos, Vec2(16, 6));
+    path = parentScene->pathFinder->getShortestPath(pos, parentScene->mapData.getTargetPosition());// Vec2(16, 6));
     
     auto dn = DrawNode::create();
     dn->clear();

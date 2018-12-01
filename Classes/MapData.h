@@ -12,7 +12,7 @@
 #include <vector>
 
 using TileType = enum {
-    EMPTY, STARTING, SETABLE, CORE, BARRICADE
+    EMPTY = 0, STARTING = 10, SETABLE = 20, CORE = 30, BARRICADE = 40
 };
 
 class MapData {

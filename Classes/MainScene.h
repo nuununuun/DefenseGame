@@ -36,6 +36,7 @@ protected:
     int width, height;
     float tileSize;
     
+public:
     MapData mapData;
 
 // cocos object

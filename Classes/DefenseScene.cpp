@@ -64,12 +64,13 @@ void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
         if (mapData.isOutOfIndex(gp)) return;
         
         auto data = mapData.getTileData(gp.x, gp.y);
-        if (mapData.isEquals(data, TileType::EMPTY)) {
+        if (data == TileType::SETABLE) {
             auto tower = Tower::create();
             tower->setPosition(getRealPosition(gp));
             addChild(tower);
             int type = (int)TileType::SETABLE + 1;
             mapData.setTileData(gp.x, gp.y, (TileType)type);
+            towers.push_back(tower);
         }
     }
     
@@ -79,17 +80,27 @@ void DefenseScene::onMouseUp(cocos2d::EventMouse *e) {
 void DefenseScene::onMouseMove(cocos2d::EventMouse *e) {
     MainScene::onMouseMove(e);
     
+    auto pos = e->getLocationInView();
+    
+    for (auto tower : towers) {
+        if (tower->getBoundingBox().containsPoint(pos)) {
+            tower->setVisibleRange();
+        } else {
+            tower->setInvisibleRange();
+        }
+    }
+    
     if (selectedSample != nullptr) {
-        towerPreview->setPosition(e->getLocationInView());
+        towerPreview->setPosition(pos);
         
         auto gp = getGridPosition(e->getLocationInView());
         if (mapData.isOutOfIndex(gp)) return;
         
         auto data = mapData.getTileData(gp.x, gp.y);
-        if (!mapData.isEquals(data, TileType::EMPTY)) {
-            towerPreview->setColor(Color3B::RED);
-        } else {
+        if (data == TileType::SETABLE) {
             towerPreview->setColor(Color3B::WHITE);
+        } else {
+            towerPreview->setColor(Color3B::RED);
         }
     }
 }

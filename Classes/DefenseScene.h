@@ -10,6 +10,8 @@
 
 #include "MainScene.h"
 
+#include "Tower.hpp"
+
 class DefenseScene : public MainScene {
 public:
     bool init();
@@ -30,6 +32,7 @@ public:
     
     cocos2d::Layer *menuLayer;
     std::vector<cocos2d::Sprite *> towerSamples;
+    std::vector<Tower *> towers;
     cocos2d::Node *selectedSample;
     cocos2d::Sprite *towerPreview;
     
