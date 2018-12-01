@@ -136,12 +136,6 @@ bool MainScene::updateTime(float dt)
     return false;
 }
 
-//bool MainScene::onTouchBegan(Touch* touch, Event* event)
-//{
-//    offenseInterface->onTouchBegan(touch, event);
-//    return true;
-//}
-
 void MainScene::onMouseDown(EventMouse *e) {
 }
 

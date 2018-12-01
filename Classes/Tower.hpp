@@ -20,16 +20,21 @@ public:
     
     void setDirection(int direction);
     
+    void act();
+    
     static cocos2d::Vec2 idxToDir(int idx) {
         return idx == 0 ? cocos2d::Vec2(-1, 0) : idx == 1 ? cocos2d::Vec2(1, 0) : idx == 2 ? cocos2d::Vec2(0, -1) : cocos2d::Vec2(0, 1);
     }
     
 public:
+    TowerType type;
     int range = 2;
+    float attackPower;
+    int cost;
+    int baseTile;
     cocos2d::DrawNode *rangeRenderer;
     
     float attackDelay = 1.0f, attackTick = 0;
-    float damage;
     
     int direction;
     

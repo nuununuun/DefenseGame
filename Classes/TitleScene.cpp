@@ -28,7 +28,18 @@ bool TitleScene::init() {
         auto client = SocketIO::connect("http://10.10.0.66:8080", *scene);
         scene->client = client;
         client->emit("defense", "");
-        Director::getInstance()->replaceScene(scene);
+        client->on("connect", [=](SIOClient *c, const std::string &data){
+            client->emit("defense", "");
+            client->on("summon", [=](SIOClient *c, const std::string &data) {
+                if (data == "\"0\"") scene->addFlyingEye();
+                if (data == "\"1\"") scene->addBaby();
+                if (data == "\"2\"") scene->addFinger();
+                if (data == "\"3\"") scene->addHeart();
+                if (data == "\"4\"") scene->addRib();
+            });
+
+        });
+		Director::getInstance()->replaceScene(scene);
     });
     
     offenseText->setCallback([&] (Ref *r) {
@@ -36,6 +47,9 @@ bool TitleScene::init() {
         auto client = SocketIO::connect("http://10.10.0.66:8080", *scene);
         scene->client = client;
         client->emit("offense", "");
+        client->on("connect", [=](SIOClient *c, const std::string &data){
+            client->emit("offense", "");
+        });
         Director::getInstance()->replaceScene(scene);
     });
     

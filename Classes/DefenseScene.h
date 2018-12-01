@@ -31,6 +31,8 @@ public:
     void drawTowerRange(const cocos2d::Vec2 &gp);
     bool isAbleTower(const cocos2d::Vec2 &gp);
     
+    virtual void onConnect(SIOClient* client) override;
+    
     CREATE_FUNC(DefenseScene);
     
 public:
@@ -48,6 +50,9 @@ public:
     int towerState = 0;
     
     bool isMouseDown = false;
+    
+public:
+    std::vector<OffenseUnit*> offenseUnits;
     
 };
 

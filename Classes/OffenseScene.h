@@ -6,13 +6,11 @@
 #include <vector>
 #include "OffenseUnit.h"
 
-enum {
-	TAG_TYPE_OFFENSE
-};
-
 class OffenseScene : public MainScene {
 public:
 	bool init();
+    
+    virtual void onConnect(SIOClient* client) override;
 
 	void onMouseDown(cocos2d::EventMouse *e) override;
 	void onMouseUp(cocos2d::EventMouse *e) override;

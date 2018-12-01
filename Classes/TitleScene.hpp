@@ -16,6 +16,11 @@ public:
     bool init();
     
     CREATE_FUNC(TitleScene);
+public:
+	float ani_add = 0.06;
+	cocos2d::Sprite * bg;
+	cocos2d::Sprite * left, * right;
+	cocos2d::Sprite * title, * subTitle;
 };
 
 #endif /* TitleScene_hpp */
