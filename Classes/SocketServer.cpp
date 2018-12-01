@@ -1,13 +1,13 @@
 #include "SocketServer.h"
 
-#include <winsock2.h>
 #include <thread>
 #include <vector>
 
 #include"StringUtil.h"
 
+#ifdef _WIN32
 #pragma comment(lib,"wsock32.lib")
-
+#endif
 
 void SocketServer::ErrorHandling(char* message)
 {
@@ -19,8 +19,11 @@ void SocketServer::ErrorHandling(char* message)
 SocketServer::SocketServer(short port)
 {
 	this->port = port;
+#ifdef _WIN32
+	WSADATA     wsaData;
 	if(WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
+#endif
 	hServSock = socket(PF_INET, SOCK_STREAM, 0);
 	if (hServSock == INVALID_SOCKET)
 		ErrorHandling("socket() error!");
@@ -87,7 +90,9 @@ void SocketServer::close()
 {
 	closesocket(hClntSock);
 	closesocket(hServSock);
+#ifdef _WIN32
 	WSACleanup();
+#endif
 	closed = true;
 }
 

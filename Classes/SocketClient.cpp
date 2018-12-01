@@ -1,25 +1,38 @@
 #include "SocketClient.h"
 
+
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+
+
+#ifdef _WIN32
+
+//#include <winsock2.h>
+#include <WS2tcpip.h>
+
+#pragma comment(lib, "wsock32.lib")
+#pragma comment(lib, "ws2_32.lib")
+
+#endif
 
 #include"StringUtil.h"
 
 #include<stdio.h>
-#include <winsock2.h>
-#include <WS2tcpip.h>
 #include <vector>
 
-#pragma comment(lib, "wsock32.lib")
-#pragma comment(lib, "ws2_32.lib")
 
 
 
 SocketClient::SocketClient(std::string ip, short port)
 {
 	this->port = port;
+
+#ifdef _WIN32
+	WSADATA     wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		ErrorHandling("WSAStartup() error!");
-
+	
+#endif
 	hSocket = socket(PF_INET, SOCK_STREAM, 0);
 
 	if (hSocket == INVALID_SOCKET)
@@ -78,7 +91,10 @@ void SocketClient::on(std::string name, std::function<void(std::string)> callbac
 void SocketClient::close()
 {
 	closesocket(hSocket);
+
+#ifdef _WIN32
 	WSACleanup();
+#endif
 }
 
 void SocketClient::ErrorHandling(char * message)

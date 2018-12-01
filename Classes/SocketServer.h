@@ -2,7 +2,14 @@
 
 #include<string>
 #include<functional>
-#include<WinSock2.h>
+#ifdef _WIN32
+#include <winsock2.h>
+#else
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>  
+#include <unistd.h> 
+#endif
 #include<thread>
 #include<map>
 
@@ -27,7 +34,6 @@ private:
 	std::map<std::string, std::function<void(std::string)>> onCallbacks;
 	std::thread tHear;
 	std::thread tListen;
-	WSADATA     wsaData;
 	SOCKET      hServSock, hClntSock;
 	SOCKADDR_IN servAddr, clntAddr;
 };
