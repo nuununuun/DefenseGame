@@ -10,13 +10,16 @@
 
 #include "Tower.hpp"
 
-#include "network/SocketIO.h"
-
 USING_NS_CC;
 using namespace std;
 
 bool MainScene::init() {
+    client = SocketIO::connect("http://10.10.0.66:80", *this);
     
+    client->on("news", [&] (SIOClient *client, const std::string &data) {
+        MessageBox("", "");
+        client->emit("abc", "asdf");
+    });
     
     tileSize = 48.0f;
     

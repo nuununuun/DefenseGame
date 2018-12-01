@@ -13,15 +13,22 @@
 
 #include "PathFinding.h"
 
-namespace cocos2d::network;
+#include "network/SocketIO.h"
 
-class MainScene : public cocos2d::Scene, public SIODelegate {
+using namespace cocos2d::network;
+
+class MainScene : public cocos2d::Scene, public SocketIO::SIODelegate {
 public:
     virtual bool init();
     
     void initializeMap();
 
     CREATE_FUNC(MainScene);
+    
+    virtual void onConnect(SIOClient* client) {}
+    virtual void onMessage(SIOClient* client, const std::string& data) {}
+    virtual void onClose(SIOClient* client) {}
+    virtual void onError(SIOClient* client, const std::string& data) {}
     
     virtual void onMouseDown(cocos2d::EventMouse *e);
     virtual void onMouseUp(cocos2d::EventMouse *e);
@@ -54,6 +61,8 @@ protected:
     
 public:
     pathfinding::PathFinding *pathFinder;
+    
+    SIOClient *client;
     
 };
 
