@@ -282,6 +282,9 @@ void OffenseScene::selfRemover(Node* sender)
 		if (sender == u->body)
 		{
 			coreHealth -= u->attackDamage;
+			if (coreHealth < 0)
+				coreHealth = 0;
+
 			hpBar_fill->setScaleX(coreHealth * 0.01f);
 			sender->removeFromParentAndCleanup(true);
 			u = nullptr;
