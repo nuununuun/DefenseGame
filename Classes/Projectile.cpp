@@ -19,7 +19,7 @@ Projectile *Projectile::create(float speed) {
 }
 
 bool Projectile::init(float speed) {
-    if (!Sprite::initWithFile("res/arrow.png")) return false;
+    if (!Sprite::initWithFile("bullet.png")) return false;
     
     this->speed = speed;
     
