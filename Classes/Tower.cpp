@@ -50,4 +50,8 @@ void Tower::setDirection(int direction) {
     }
 }
 
+void Tower::attack() {
+    
+}
+
 

@@ -9,6 +9,7 @@
 
 #include "Tower.hpp"
 #include "Unit.hpp"
+#include "Projectile.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -174,16 +175,17 @@ void DefenseScene::clearPreview() {
 }
 
 void DefenseScene::update(float dt) {
-//    for (auto &tower : towers) {
-//        // check
-//        if () {
-//            // 따로 빼야 할지도
-//            if (tower->attackTick >= tower->attackDelay) {
-//                for (int i = 0; i < tower->range; i++) {
-//                    Tower::idxToDir(tower->direction);
-//                }
-//                tower->attackTick = 0;
-//            } else tower->attackTick += 1.0f * dt;
-//        } else tower->attackTick = 0;
-//    }
+    for (auto &tower : towers) {
+        // check
+        if (tower->attackTick >= tower->attackDelay) {
+            for (int i = 0; i < tower->range; i++) {
+                Tower::idxToDir(tower->direction);
+                auto proj = Projectile::create();
+                proj->setPosition(480, 480);
+                proj->setGlobalZOrder(1000);
+                addChild(proj);
+            }
+            tower->attackTick = 0;
+        } else tower->attackTick += 1.0f * dt;
+    }
 }
