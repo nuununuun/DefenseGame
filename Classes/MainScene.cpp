@@ -38,8 +38,8 @@ bool MainScene::init() {
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, this);
     
 	/* when you offenser */
-	offenseInterface = OffenseInterface::create(this);
-	addChild(offenseInterface);
+	//offenseInterface = OffenseInterface::create(this);
+	//addChild(offenseInterface);
 
 	//offenseInterface->addKenny(0.1f);
 	//offenseInterface->addJenny(0.1f);
@@ -111,7 +111,6 @@ void MainScene::updateMap() {
 //}
 
 void MainScene::onMouseDown(EventMouse *e) {
-	offenseInterface->onMouseDown(e);
 }
 
 void MainScene::onMouseUp(EventMouse *e) {

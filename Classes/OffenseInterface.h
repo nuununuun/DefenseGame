@@ -3,10 +3,11 @@
 
 #include "cocos2d.h"
 #include "PathFinding.h"
+#include "FlyingEye.hpp"
+
 #include <vector>
 
 class MainScene;
-
 class OffenseInterface : public cocos2d::Layer
 {
 public:
@@ -35,6 +36,7 @@ private:
 	cocos2d::Sprite* spriteKenny;
 	cocos2d::Sprite* spriteFlying_eye;
 
+	FlyingEye *flyingEye;
 	MainScene* parentScene;
 };
 

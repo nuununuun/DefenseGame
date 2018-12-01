@@ -3,7 +3,7 @@
 #include "PathFinding.h"
 
 #include "MainScene.h"
-
+#include "FlyingEye.hpp"
 #include <vector>
 
 USING_NS_CC;
@@ -30,6 +30,9 @@ bool OffenseInterface::init(MainScene* parent)
 	parent->addChild(interfaceFlying_eye);
 
 	parentScene = parent;
+
+	//flyingEye = FlyingEye::create(parentScene);
+	parentScene->addChild(flyingEye);
 	return true;
 }
 
