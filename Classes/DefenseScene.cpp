@@ -28,21 +28,18 @@ bool DefenseScene::init() {
     towerPreview->setVisible(false);
     addChild(towerPreview);
     
-    for (int j = 0; j < 2; j++) {
-        for (int i = 0; i < 4; i++) {
+    /// tower1
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 2; j++) {
             auto sample = Sprite::create("res/tower1.png");
-            sample->setPosition(Vec2(mapLayer->getPositionX() + mapData.width * 48 * 0.5f + (48 + 16) * (j + 1), i * 64 + 72));
+            sample->setPosition(Vec2(967 + j * 98, 118 + i * 98));
+            sample->setGlobalZOrder(1001);
             menuLayer->addChild(sample);
             towerSamples.push_back(sample);
         }
     }
     
     scheduleUpdate();
-    
-//    socket = SocketServer(5001);
-//    socket.listenClient([&](){
-//        socket.emit("msg","connected");
-//    });
     
     return true;
 }

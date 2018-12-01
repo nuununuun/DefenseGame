@@ -11,6 +11,9 @@
 #include "MainScene.h"
 
 #include "Tower.hpp"
+#include "network/SocketIO.h"
+
+using namespace cocos2d::network;
 
 class DefenseScene : public MainScene {
 public:
@@ -29,7 +32,6 @@ public:
     bool isAbleTower(const cocos2d::Vec2 &gp);
     
     CREATE_FUNC(DefenseScene);
-    
     
 public:
     void selectGrid(const cocos2d::Vec2 &pos);

@@ -16,24 +16,33 @@ using namespace std;
 bool MainScene::init() {
     tileSize = 48.0f;
     
-    client = SocketIO::connect("http://10.10.0.66:8080", *this);
-    client->on("news", [&](SIOClient *client, const std::string &data) {
-        client->emit("abc", "asdf");
-    });
-    
     mapData = MapData("data/map1.tmx");
     
     auto size = Director::getInstance()->getVisibleSize();
-	auto winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getWinSize();
     Vec2 origin = size / 2;
     
-	auto bg = Sprite::create("res/main_1.png");
-	bg->setPosition(winSize * 0.5f);
+    auto bg = Sprite::create("res/background.png");
+    bg->setPosition(winSize * 0.5f);
+    bg->getTexture()->setAliasTexParameters();
+    bg->setGlobalZOrder(100);
     addChild(bg);
     
-//    timeLabel = Label::createWithTTF(, <#const std::string &fontFilePath#>, <#float fontSize#>)
-//    this->setPosition();
-//    this->addChild(timeLabel);
+    auto toolbox = Sprite::create("res/toolbox.png");
+    toolbox->setPosition(origin);
+    toolbox->getTexture()->setAliasTexParameters();
+    toolbox->setGlobalZOrder(1000);
+    addChild(toolbox);
+    
+    auto toolboxInner = Sprite::create("res/toolboxInner.png");
+    toolboxInner->setPosition(origin);
+    toolboxInner->getTexture()->setAliasTexParameters();
+    toolboxInner->setGlobalZOrder(999);
+    addChild(toolboxInner);
+    
+    //    timeLabel = Label::createWithTTF(, <#const std::string &fontFilePath#>, <#float fontSize#>)
+    //    this->setPosition();
+    //    this->addChild(timeLabel);
     initializeMap();
     
     pathFinder = pathfinding::PathFinding::create();
@@ -46,12 +55,6 @@ bool MainScene::init() {
     mouseListener->onMouseMove = CC_CALLBACK_1(MainScene::onMouseMove, this);
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(mouseListener, this);
     
-	/* when you offenser */
-	//offenseInterface = OffenseInterface::create(this);
-	//addChild(offenseInterface);
-
-	//offenseInterface->addKenny(0.1f);
-	//offenseInterface->addJenny(0.1f);
     return true;
 }
 
