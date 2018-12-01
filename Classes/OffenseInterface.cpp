@@ -83,26 +83,45 @@ void OffenseInterface::addJenny()
 {
 	Size winSize = Director::getInstance()->getWinSize();
 
-	spriteJenny = Sprite::create("res/Jenny.png");
+	spriteJenny = Sprite::create("res/Flying_eye_R.png");
+	spriteJenny->setTextureRect(Rect(0, 0, 32, 32));
 	setFirstPosition(spriteJenny);
 	spriteJenny->setAnchorPoint(Vec2(0.5f, 0.5f));
-	spriteJenny->setScale(0.5f);
+//	spriteJenny->setScale(0.5f);
+
+	SpriteFrameCache* frameCache = SpriteFrameCache::getInstance();
+	Animation* animation = Animation::create();
+	animation->setDelayPerUnit(0.3f);
+
+	for (int i = 0; i < 10; i++)
+	{
+		frameCache->addSpriteFrame(SpriteFrame::createWithTexture(spriteJenny->getTexture(), Rect(32 * i, 0, 32, 32)), "res/Flying_eye_R.png");
+		animation->addSpriteFrameWithTexture(spriteJenny->getTexture(), Rect(32 * i, 0, 32, 32));
+	}
+
+	Animate* animate = Animate::create(animation);
 
 	Vec2 entryPos = parentScene->getGridPosition(spriteJenny->getPosition());
 	std::vector<Vec2> path = parentScene->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
 
 	parentScene->addChild(spriteJenny);
 
-	Vector<FiniteTimeAction*> acts;
+	Vector<FiniteTimeAction*> moves;
 	for (int i = 0; i < path.size(); i++)
 	{
 		MoveTo* moveTo = MoveTo::create(0.5f, parentScene->getRealPosition(path[i]));
-		acts.pushBack(moveTo);
+		moves.pushBack(moveTo);
 	}
 	CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(OffenseInterface::selfRemover, this));
-	acts.pushBack(callfunc);
+	//acts.pushBack(callfunc);
+	//acts.pushBack(animate);
+	auto moveSeq = Sequence::create(moves);
+	Vector<FiniteTimeAction*> actions;
+	actions.pushBack(moveSeq);
+	actions.pushBack(animate);
+	actions.pushBack(callfunc);
 
-	auto act = Sequence::create(acts);
+	auto act = Spawn::create(actions);
 	auto rep = RepeatForever::create(act);
 
 	spriteJenny->runAction(rep);
