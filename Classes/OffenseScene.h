@@ -73,12 +73,13 @@ private:
 
 	bool mIsShoot;
 private:
-	int coreHealth;
+	float coreHealth;
 	cocos2d::Sprite *hpBar_fill;
 	cocos2d::Sprite *hpBar_empty;
 
 	float money;
 	std::vector<cocos2d::Sprite *>cost;
+	std::vector<cocos2d::Sprite *>hpBar;
 };
 
 #endif

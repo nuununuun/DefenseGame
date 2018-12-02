@@ -10,7 +10,7 @@ bool OffenseScene::init() {
 	menuLayer = Layer::create();
 	addChild(menuLayer);
 
-	coreHealth = 100;
+	coreHealth = 100.f;
 	money = 20;
 
 	for (int i = 0; i < 5; i++)
@@ -20,6 +20,15 @@ bool OffenseScene::init() {
 		cost[i]->setGlobalZOrder(1001);
 		cost[i]->setVisible(false);
 		menuLayer->addChild(cost[i]);
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		hpBar.push_back(Sprite::create("res/hp.png"));
+		hpBar[i]->setPosition(Vec2(977 + i * 60, 148 + 5 * 98));
+		hpBar[i]->setGlobalZOrder(1001);
+		hpBar[i]->setVisible(true);
+		menuLayer->addChild(hpBar[i]);
 	}
 
 	//hpBar_fill = Sprite::create("res/hpBar_fill.png");
@@ -151,7 +160,7 @@ void OffenseScene::updateCoolTime(float dt)
 	if(money <= 50.0f)
 		money += dt * 10;
 
-	CCLOG("%f", money);
+	CCLOG("money: %f", money);
 	shootFromCharacter();
 }
 
@@ -400,6 +409,50 @@ void OffenseScene::selfRemover(Node* sender)
 			coreHealth -= u->attackDamage;
 			if (coreHealth < 0)
 				coreHealth = 0;
+
+			CCLOG("coreHealth: %f", coreHealth);
+			if (coreHealth >= 80.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(true);
+				hpBar[3]->setVisible(true);
+				hpBar[4]->setVisible(true);
+			}
+			else if (coreHealth >= 60.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(true);
+				hpBar[3]->setVisible(true);
+				hpBar[4]->setVisible(false);
+			}
+			else if (coreHealth >= 40.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(true);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
+			else if (coreHealth >= 20.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(false);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
+			else if (coreHealth > 0.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(false);
+				hpBar[2]->setVisible(false);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
+			else {
+				hpBar[0]->setVisible(false);
+				hpBar[1]->setVisible(false);
+				hpBar[2]->setVisible(false);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
 
 			//	hpBar_fill->setScaleX(coreHealth * 0.01f);
 			sender->removeFromParentAndCleanup(true);
