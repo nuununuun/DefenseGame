@@ -51,14 +51,8 @@ bool TitleScene::init() {
     right->setPosition(Vec2(1280 + 640 / 2, 720 / 2));
     this->addChild(right);
     
-    
-    this->schedule([&](float dt) {
-        Vec2 pos = bg->getPosition();
-        if (pos.y <= 360 - 15 || pos.y >= 360) ani_add *= -1;
-        pos.y += ani_add;
-        bg->setPosition(pos);
-    }, "ani");
-
+    auto act = Sequence::create(EaseSineOut::create(MoveBy::create(2.5, Vec3(0, -4, 0))), EaseSineIn::create(MoveBy::create(2.5, Vec3(0, 8, 0))), nullptr);
+    bg->runAction(RepeatForever::create(act));
     
     defenseText->setCallback([&] (Ref *r) {
         dScene = DefenseScene::create();
@@ -74,16 +68,18 @@ bool TitleScene::init() {
                 if (data == "\"3\"") dScene->addHeart();
                 if (data == "\"4\"") dScene->addRib();
             });
+            
+            auto moveTo = MoveTo::create(0.2f, Vec2(1280, 720) / 2);
+            auto actionInterval = EaseQuarticActionOut::create(moveTo);
+            Sequence *sequence = Sequence::create(actionInterval, CallFunc::create([&] {
+            }), NULL);
+            left->runAction(sequence);
+            moveTo = MoveTo::create(0.2f, Vec2(1280, 720) / 2);
+            actionInterval = EaseQuarticActionOut::create(moveTo);
+            right->runAction(actionInterval);
+            
             client->on("game-ready", [&](SIOClient *c, const std::string &data) {
-                auto moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
-                auto actionInterval = EaseExponentialIn::create(moveTo);
-                Sequence *sequence = Sequence::create(actionInterval, CallFunc::create([&] {
-                    Director::getInstance()->replaceScene(dScene);
-                }), NULL);
-                left->runAction(sequence);
-                moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
-                actionInterval = EaseExponentialIn::create(moveTo);
-                right->runAction(actionInterval);
+                Director::getInstance()->replaceScene(dScene);
             });
         });
     });

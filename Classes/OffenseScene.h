@@ -28,6 +28,8 @@ public:
 
 	void selfRemover(cocos2d::Node* sender);
 	void update(float dt);
+    
+    void putTower(int dir);
 
 	CREATE_FUNC(OffenseScene);
 
