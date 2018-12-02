@@ -73,10 +73,25 @@ private:
 	float fireCool;
 
 	bool mIsShoot;
+
+	void playSound();
+	void preloadAll();
+	void uncacheAll();
+	void pauseSound();
 private:
+<<<<<<< HEAD
+=======
+	float soundVolunm;
+	int audioId;
+
+	float coreHealth;
+	cocos2d::Sprite *hpBar_fill;
+	cocos2d::Sprite *hpBar_empty;
+>>>>>>> 2b2d4ec671592460b3631284e31779008f6d2107
 
 	float money;
 	std::vector<cocos2d::Sprite *>cost;
+	std::vector<cocos2d::Sprite *>hpBar;
 };
 
 #endif

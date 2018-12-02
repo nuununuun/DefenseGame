@@ -1,16 +1,24 @@
 #include "OffenseScene.h"
+#include "SimpleAudioEngine.h"
+#include "AudioEngine.h"
 
 USING_NS_CC;
 using namespace std;
+using namespace experimental;
+
+const std::string BGM_PATH = "explosion02.wav";
 
 bool OffenseScene::init() {
 	if (!MainScene::init()) 
 		return false;
     
+	soundVolunm = 1.0f;
+	preloadAll();
+
 	menuLayer = Layer::create();
 	addChild(menuLayer);
 
-	coreHealth = 100;
+	coreHealth = 100.f;
 	money = 20;
 
 	for (int i = 0; i < 5; i++)
@@ -20,6 +28,15 @@ bool OffenseScene::init() {
 		cost[i]->setGlobalZOrder(1001);
 		cost[i]->setVisible(false);
 		menuLayer->addChild(cost[i]);
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		hpBar.push_back(Sprite::create("res/hp.png"));
+		hpBar[i]->setPosition(Vec2(977 + i * 60, 148 + 5 * 98));
+		hpBar[i]->setGlobalZOrder(1001);
+		hpBar[i]->setVisible(true);
+		menuLayer->addChild(hpBar[i]);
 	}
 
 	//hpBar_fill = Sprite::create("res/hpBar_fill.png");
@@ -98,6 +115,29 @@ bool OffenseScene::init() {
 	return true;
 }
 
+void OffenseScene::playSound()
+{
+	if (AudioEngine::getState(audioId) != AudioEngine::AudioState::PLAYING)
+		audioId = AudioEngine::play2d(BGM_PATH, true, soundVolunm);
+}
+
+void OffenseScene::preloadAll()
+{
+	AudioEngine::preload(BGM_PATH);
+}
+
+void OffenseScene::uncacheAll()
+{
+	AudioEngine::stop(audioId);
+	AudioEngine::uncache(BGM_PATH);
+}
+
+void OffenseScene::pauseSound()
+{
+	if (AudioEngine::getState(audioId) == AudioEngine::AudioState::PLAYING)
+		AudioEngine::pause(audioId);
+}
+
 void OffenseScene::onConnect(SIOClient* c) {
 }
 
@@ -151,7 +191,7 @@ void OffenseScene::updateCoolTime(float dt)
 	if(money <= 50.0f)
 		money += dt * 10;
 
-	CCLOG("%f", money);
+	CCLOG("money: %f", money);
 	shootFromCharacter();
 }
 
@@ -239,6 +279,8 @@ void OffenseScene::onMouseUp(cocos2d::EventMouse *e) {
 	MainScene::onMouseUp(e);
 	mIsShoot = false;
 	isMouseDown = false;
+
+	pauseSound();
 }
 
 void OffenseScene::onMouseMove(cocos2d::EventMouse *e) {
@@ -294,8 +336,10 @@ void OffenseScene::shootFromCharacter()
 {
 	if (mIsShoot == true)
 	{
-		if (fireCool >= 0.01f)
+		if (fireCool >= 0.5f)
 		{
+			playSound();
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("explosion02.wav");
 			fireCool = 0;
 			addShootFire(mPtShoot);
 		}
@@ -400,6 +444,50 @@ void OffenseScene::selfRemover(Node* sender)
 			coreHealth -= u->attackDamage;
 			if (coreHealth < 0)
 				coreHealth = 0;
+
+			CCLOG("coreHealth: %f", coreHealth);
+			if (coreHealth >= 80.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(true);
+				hpBar[3]->setVisible(true);
+				hpBar[4]->setVisible(true);
+			}
+			else if (coreHealth >= 60.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(true);
+				hpBar[3]->setVisible(true);
+				hpBar[4]->setVisible(false);
+			}
+			else if (coreHealth >= 40.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(true);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
+			else if (coreHealth >= 20.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(true);
+				hpBar[2]->setVisible(false);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
+			else if (coreHealth > 0.0f) {
+				hpBar[0]->setVisible(true);
+				hpBar[1]->setVisible(false);
+				hpBar[2]->setVisible(false);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
+			else {
+				hpBar[0]->setVisible(false);
+				hpBar[1]->setVisible(false);
+				hpBar[2]->setVisible(false);
+				hpBar[3]->setVisible(false);
+				hpBar[4]->setVisible(false);
+			}
 
 			//	hpBar_fill->setScaleX(coreHealth * 0.01f);
 			sender->removeFromParentAndCleanup(true);
