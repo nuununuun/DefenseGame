@@ -58,13 +58,8 @@ bool TitleScene::init() {
     
     defenseText->setCallback([&] (Ref *r) {
         dScene = DefenseScene::create();
-<<<<<<< HEAD
-//        dScene->retain();
         auto client = SocketIO::connect("http://10.10.0.66:8000", *dScene);
-=======
         dScene->retain();
-        auto client = SocketIO::connect("http://10.10.0.66:8001", *dScene);
->>>>>>> 2b2d4ec671592460b3631284e31779008f6d2107
         dScene->client = client;
         dScene->client->on("connect", [=](SIOClient *c, const std::string &data) {
             dScene->client->emit("defense", "");
@@ -95,16 +90,10 @@ bool TitleScene::init() {
     });
     
     offenseText->setCallback([&] (Ref *r) {
-<<<<<<< HEAD
         oScene = OffenseScene::create();
         oScene->retain();
         auto client = SocketIO::connect("http://10.10.0.66:8000", *oScene);
         oScene->client = client;
-=======
-        auto scene = OffenseScene::create();
-        auto client = SocketIO::connect("http://10.10.0.66:8001", *scene);
-        scene->client = client;
->>>>>>> 2b2d4ec671592460b3631284e31779008f6d2107
         client->on("connect", [=](SIOClient *c, const std::string &data) {
             c->emit("offense", "");
             c->on("build", [=](SIOClient *c, const std::string &data) {
