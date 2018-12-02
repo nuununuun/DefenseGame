@@ -21,6 +21,8 @@ class DefenseScene : public MainScene {
 public:
     bool init();
     
+    static DefenseScene *create();
+    
     void onMouseDown(cocos2d::EventMouse *e) override;
     void onMouseUp(cocos2d::EventMouse *e) override;
     void onMouseMove(cocos2d::EventMouse *e) override;
@@ -38,11 +40,14 @@ public:
     void addFinger();
     void addHeart();
     void addRib();
+    void addFist();
+    void addTooth();
+    void addCaecum();
     
     void setFirstPosition(cocos2d::Sprite* sprite);    
     void selfRemover(cocos2d::Node* sender);
     
-    CREATE_FUNC(DefenseScene);
+//    CREATE_FUNC(DefenseScene);
     
 public:
     void selectGrid(const cocos2d::Vec2 &pos);
@@ -52,7 +57,6 @@ public:
     
     cocos2d::Layer *menuLayer;
     std::vector<cocos2d::Sprite *> towerSamples;
-    std::vector<Tower *> towers;
     cocos2d::Node *selectedSample;
     cocos2d::Sprite *towerPreview;
     
@@ -61,7 +65,6 @@ public:
     bool isMouseDown = false;
     
 public:
-    std::vector<OffenseUnit*> offenseUnits;
     
 };
 

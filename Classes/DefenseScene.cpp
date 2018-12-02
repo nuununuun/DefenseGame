@@ -15,6 +15,16 @@
 USING_NS_CC;
 using namespace std;
 
+DefenseScene * DefenseScene::create()
+{
+    auto ret = new (std::nothrow) DefenseScene();
+    if (ret && ret->init()) {
+//        ret->autorelease();
+    } else CC_SAFE_DELETE(ret);
+    
+    return ret;
+}
+
 bool DefenseScene::init() {
     if (!MainScene::init()) return false;
     
@@ -138,6 +148,8 @@ void DefenseScene::putTower(int dir) {
         int type = (int)TileType::SETABLE + 1;
         mapData.setTileData(gp.x, gp.y, (TileType)type);
         towers.push_back(tower);
+        
+        client->emit("build", to_string(gp.x) + " " + to_string(gp.y) + " " + to_string(dir));
     }
 }
 
@@ -484,6 +496,171 @@ void DefenseScene::addRib()
     unit->isEnermy = true;
     unit->eUnitType = RUSH;
     unit->setEnergy(2);
+    
+    offenseUnits.push_back(unit);
+}
+
+void DefenseScene::addFist() {
+    Size winSize = Director::getInstance()->getWinSize();
+    
+    auto textureFlying_eye = Sprite::create("res/Fist_R.png")->getTexture();
+    
+    Animation* animation = Animation::create();
+    animation->setDelayPerUnit(0.3f);
+    
+    for (int i = 0; i < 4; i++)
+        animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
+    
+    Animate* animate = Animate::create(animation);
+    
+    auto spriteFist = Sprite::create("res/Fist_R.png", Rect(0, 0, 32, 32));
+    spriteFist->setScale(1.5f);
+    setFirstPosition(spriteFist);
+    this->addChild(spriteFist);
+    
+    Vec2 entryPos = this->getGridPosition(spriteFist->getPosition());
+    std::vector<Vec2> path = this->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+    
+    Vector<FiniteTimeAction*> moves;
+    for (int i = 0; i < path.size(); i++)
+    {
+        MoveTo* moveTo = MoveTo::create(0.5f, this->getRealPosition(path[i]));
+        moves.pushBack(moveTo);
+    }
+    
+    CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(DefenseScene::selfRemover, this));
+    moves.pushBack(callfunc);
+    
+    auto moveSeq = Sequence::create(moves);
+    //Vector<FiniteTimeAction*> actions;
+    //actions.pushBack(moveSeq);
+    //actions.pushBack(animateReapeat);
+    //actions.pushBack(callfunc);
+    
+    auto animateReapeat = RepeatForever::create(animate);
+    auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
+    
+    spriteFist->runAction(act);
+    spriteFist->getTexture()->setAliasTexParameters();
+    
+    OffenseUnit *unit = new OffenseUnit();
+    unit->body = spriteFist;
+    unit->body->setTag(0);
+    unit->isEnermy = true;
+    unit->eUnitType = RUSH;
+    unit->setEnergy(2);
+    unit->attackDamage = 2;
+    unit->cost = 2;
+    
+    offenseUnits.push_back(unit);
+}
+
+void DefenseScene::addTooth() {
+    Size winSize = Director::getInstance()->getWinSize();
+    
+    auto textureFlying_eye = Sprite::create("res/Tooth_D.png")->getTexture();
+    
+    Animation* animation = Animation::create();
+    animation->setDelayPerUnit(0.2f);
+    
+    for (int i = 0; i < 8; i++)
+        animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
+    
+    Animate* animate = Animate::create(animation);
+    
+    auto spriteTooth = Sprite::create("res/Tooth_D.png", Rect(0, 0, 32, 32));
+    spriteTooth->setScale(1.5f);
+    setFirstPosition(spriteTooth);
+    this->addChild(spriteTooth);
+    
+    Vec2 entryPos = this->getGridPosition(spriteTooth->getPosition());
+    std::vector<Vec2> path = this->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+    
+    Vector<FiniteTimeAction*> moves;
+    for (int i = 0; i < path.size(); i++)
+    {
+        MoveTo* moveTo = MoveTo::create(0.5f, this->getRealPosition(path[i]));
+        moves.pushBack(moveTo);
+    }
+    
+    CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(DefenseScene::selfRemover, this));
+    moves.pushBack(callfunc);
+    
+    auto moveSeq = Sequence::create(moves);
+    //Vector<FiniteTimeAction*> actions;
+    //actions.pushBack(moveSeq);
+    //actions.pushBack(animateReapeat);
+    //actions.pushBack(callfunc);
+    
+    auto animateReapeat = RepeatForever::create(animate);
+    auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
+    
+    spriteTooth->runAction(act);
+    spriteTooth->getTexture()->setAliasTexParameters();
+    
+    OffenseUnit *unit = new OffenseUnit();
+    unit->body = spriteTooth;
+    unit->body->setTag(0);
+    unit->isEnermy = true;
+    unit->eUnitType = RUSH;
+    unit->setEnergy(2);
+    unit->attackDamage = 2;
+    unit->cost = 2;
+    
+    offenseUnits.push_back(unit);
+}
+
+void DefenseScene::addCaecum() {
+    Size winSize = Director::getInstance()->getWinSize();
+    
+    auto textureFlying_eye = Sprite::create("res/Caecum_R.png")->getTexture();
+    
+    Animation* animation = Animation::create();
+    animation->setDelayPerUnit(0.1f);
+    
+    for (int i = 0; i < 8; i++)
+        animation->addSpriteFrameWithTexture(textureFlying_eye, Rect(32 * i, 0, 32, 32));
+    
+    Animate* animate = Animate::create(animation);
+    
+    auto spriteCaecum = Sprite::create("res/Caecum_R.png", Rect(0, 0, 32, 32));
+    spriteCaecum->setScale(1.5f);
+    setFirstPosition(spriteCaecum);
+    this->addChild(spriteCaecum);
+    
+    Vec2 entryPos = this->getGridPosition(spriteCaecum->getPosition());
+    std::vector<Vec2> path = this->pathFinder->getShortestPath(entryPos, Vec2(16, 6));
+    
+    Vector<FiniteTimeAction*> moves;
+    for (int i = 0; i < path.size(); i++)
+    {
+        MoveTo* moveTo = MoveTo::create(0.5f, this->getRealPosition(path[i]));
+        moves.pushBack(moveTo);
+    }
+    
+    CallFuncN* callfunc = CallFuncN::create(CC_CALLBACK_1(DefenseScene::selfRemover, this));
+    moves.pushBack(callfunc);
+    
+    auto moveSeq = Sequence::create(moves);
+    //Vector<FiniteTimeAction*> actions;
+    //actions.pushBack(moveSeq);
+    //actions.pushBack(animateReapeat);
+    //actions.pushBack(callfunc);
+    
+    auto animateReapeat = RepeatForever::create(animate);
+    auto act = Spawn::create(moveSeq, Repeat::create(animate, 100), NULL);
+    
+    spriteCaecum->runAction(act);
+    spriteCaecum->getTexture()->setAliasTexParameters();
+    
+    OffenseUnit *unit = new OffenseUnit();
+    unit->body = spriteCaecum;
+    unit->body->setTag(0);
+    unit->isEnermy = true;
+    unit->eUnitType = RUSH;
+    unit->setEnergy(2);
+    unit->attackDamage = 2;
+    unit->cost = 2;
     
     offenseUnits.push_back(unit);
 }

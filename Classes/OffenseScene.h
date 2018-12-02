@@ -29,7 +29,7 @@ public:
 	void selfRemover(cocos2d::Node* sender);
 	void update(float dt);
     
-    void putTower(int dir);
+    void putTower(const cocos2d::Vec2 &gp, int dir);
 
 	CREATE_FUNC(OffenseScene);
 
@@ -66,7 +66,6 @@ private:
 	void addShootFire(cocos2d::Point pt);
 	void weaponRemover(Node* sender);
 	void IsCollision(float dt);
-	std::vector<OffenseUnit*> offenseUnits;
 	std::vector<cocos2d::Sprite*> weaponArr;
 	void shootFromCharacter();
 	cocos2d::Sprite *bullet;
@@ -75,9 +74,6 @@ private:
 
 	bool mIsShoot;
 private:
-	int coreHealth;
-	cocos2d::Sprite *hpBar_fill;
-	cocos2d::Sprite *hpBar_empty;
 
 	float money;
 	std::vector<cocos2d::Sprite *>cost;

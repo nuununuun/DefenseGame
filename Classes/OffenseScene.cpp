@@ -858,16 +858,12 @@ void OffenseScene::addFist()
 	offenseUnits.push_back(unit);
 }
 
-void OffenseScene::putTower(int dir) {
-//    towerState = 0;
-//    
-//    auto gp = getGridPosition(towerPreview->getPosition());
-//    if (mapData.getTileData(gp.x, gp.y) == TileType::SETABLE) {
-//        auto tower = Tower::create(dir, Tower::ARROW);
-//        tower->setPosition(getRealPosition(gp));
-//        addChild(tower);
-//        int type = (int)TileType::SETABLE + 1;
-//        mapData.setTileData(gp.x, gp.y, (TileType)type);
-//        towers.push_back(tower);
-//    }
+void OffenseScene::putTower(const Vec2 &gp, int dir) {
+    auto tower = Tower::create(dir, Tower::ARROW);
+    tower->setPosition(getRealPosition(gp));
+    addChild(tower);
+    
+    int type = (int)TileType::SETABLE + 1;
+    mapData.setTileData(gp.x, gp.y, (TileType)type);
+    towers.push_back(tower);
 }

@@ -15,6 +15,10 @@
 
 #include "network/SocketIO.h"
 
+#include "OffenseUnit.h"
+
+#include "Tower.hpp"
+
 using namespace cocos2d::network;
 
 class MainScene : public cocos2d::Scene, public SocketIO::SIODelegate {
@@ -72,6 +76,14 @@ public:
     pathfinding::PathFinding *pathFinder;
     
     SIOClient *client;
+    
+    int coreHealth;
+    cocos2d::Sprite *hpBar_fill;
+    cocos2d::Sprite *hpBar_empty;
+    std::vector<OffenseUnit*> offenseUnits;
+    
+    
+    std::vector<Tower *> towers;
     
 };
 

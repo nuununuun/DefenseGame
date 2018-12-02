@@ -26,7 +26,7 @@
 
 USING_NS_CC;
 
-#define DEBUG_PRINT 1
+#define DEBUG_PRINT 0
 
 namespace pathfinding{
     

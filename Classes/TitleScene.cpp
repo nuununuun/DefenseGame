@@ -10,6 +10,8 @@
 #include "DefenseScene.h"
 #include "OffenseScene.h"
 
+#include "StringUtil.h"
+
 USING_NS_CC;
 using namespace cocos2d::network;
 
@@ -56,17 +58,20 @@ bool TitleScene::init() {
     
     defenseText->setCallback([&] (Ref *r) {
         dScene = DefenseScene::create();
-        dScene->retain();
-        auto client = SocketIO::connect("http://10.10.0.66:8080", *dScene);
+//        dScene->retain();
+        auto client = SocketIO::connect("http://10.10.0.66:8000", *dScene);
         dScene->client = client;
-        client->on("connect", [=](SIOClient *c, const std::string &data) {
-            client->emit("defense", "");
-            client->on("summon", [=](SIOClient *c, const std::string &data) {
+        dScene->client->on("connect", [=](SIOClient *c, const std::string &data) {
+            dScene->client->emit("defense", "");
+            dScene->client->on("summon", [=](SIOClient *c, const std::string &data) {
                 if (data == "\"0\"") dScene->addFlyingEye();
                 if (data == "\"1\"") dScene->addBaby();
                 if (data == "\"2\"") dScene->addFinger();
                 if (data == "\"3\"") dScene->addHeart();
-                if (data == "\"4\"") dScene->addRib();
+                if (data == "\"4\"") dScene->addFist();
+                if (data == "\"5\"") dScene->addRib();
+                if (data == "\"6\"") dScene->addTooth();
+                if (data == "\"7\"") dScene->addCaecum();
             });
             
             auto moveTo = MoveTo::create(0.2f, Vec2(1280, 720) / 2);
@@ -78,36 +83,40 @@ bool TitleScene::init() {
             actionInterval = EaseQuarticActionOut::create(moveTo);
             right->runAction(actionInterval);
             
-            client->on("game-ready", [&](SIOClient *c, const std::string &data) {
+            c->on("game-ready", [=](SIOClient *c, const std::string &data) {
                 Director::getInstance()->replaceScene(dScene);
             });
         });
     });
     
     offenseText->setCallback([&] (Ref *r) {
-        auto scene = OffenseScene::create();
-        auto client = SocketIO::connect("http://10.10.0.66:8080", *scene);
-        scene->client = client;
+        oScene = OffenseScene::create();
+        oScene->retain();
+        auto client = SocketIO::connect("http://10.10.0.66:8000", *oScene);
+        oScene->client = client;
         client->on("connect", [=](SIOClient *c, const std::string &data) {
-            client->emit("offense", "");
-			client->on("build", [=](SIOClient *c, const std::string &data) {
-				//if (data == "\"0\"") scene->addFlyingEye();
-				//if (data == "\"1\"") scene->addBaby();
-				//if (data == "\"2\"") scene->addFinger();
-				//if (data == "\"3\"") scene->addHeart();
-				//if (data == "\"4\"") scene->addRib();
-			});
+            c->emit("offense", "");
+            c->on("build", [=](SIOClient *c, const std::string &data) {
+                auto msg = StringUtil::trim(data, "\"");
+                auto spl = StringUtil::split(msg, ' ');
+                
+                int gx = std::stoi(spl[0]), gy = std::stoi(spl[1]), dir = std::stoi(spl[2]);
+                oScene->putTower(Vec2(gx, gy), dir);
+            });
+            
+            auto moveTo = MoveTo::create(0.2f, Vec2(1280, 720) / 2);
+            auto actionInterval = EaseQuarticActionOut::create(moveTo);
+            Sequence *sequence = Sequence::create(actionInterval, CallFunc::create([&] {
+            }), NULL);
+            left->runAction(sequence);
+            moveTo = MoveTo::create(0.2f, Vec2(1280, 720) / 2);
+            actionInterval = EaseQuarticActionOut::create(moveTo);
+            right->runAction(actionInterval);
+            
+            c->on("game-ready", [=](SIOClient *c, const std::string &data) {
+                Director::getInstance()->replaceScene(oScene);
+            });
         });
-
-
-		auto moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
-		auto actionInterval = EaseExponentialIn::create(moveTo);
-		left->runAction(actionInterval);
-		moveTo = MoveTo::create(0.9f, Vec2(1280, 720) / 2);
-		actionInterval = EaseExponentialIn::create(moveTo);
-		right->runAction(actionInterval);
-
-        Director::getInstance()->replaceScene(scene);
     });
     
     return true;
