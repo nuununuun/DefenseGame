@@ -1,12 +1,20 @@
 #include "OffenseScene.h"
+#include "SimpleAudioEngine.h"
+#include "AudioEngine.h"
 
 USING_NS_CC;
 using namespace std;
+using namespace experimental;
+
+const std::string BGM_PATH = "explosion02.wav";
 
 bool OffenseScene::init() {
 	if (!MainScene::init()) 
 		return false;
     
+	soundVolunm = 1.0f;
+	preloadAll();
+
 	menuLayer = Layer::create();
 	addChild(menuLayer);
 
@@ -105,6 +113,29 @@ bool OffenseScene::init() {
 	schedule(schedule_selector(OffenseScene::IsCollision), 0.01f);
 	schedule(schedule_selector(OffenseScene::updateCoolTime));
 	return true;
+}
+
+void OffenseScene::playSound()
+{
+	if (AudioEngine::getState(audioId) != AudioEngine::AudioState::PLAYING)
+		audioId = AudioEngine::play2d(BGM_PATH, true, soundVolunm);
+}
+
+void OffenseScene::preloadAll()
+{
+	AudioEngine::preload(BGM_PATH);
+}
+
+void OffenseScene::uncacheAll()
+{
+	AudioEngine::stop(audioId);
+	AudioEngine::uncache(BGM_PATH);
+}
+
+void OffenseScene::pauseSound()
+{
+	if (AudioEngine::getState(audioId) == AudioEngine::AudioState::PLAYING)
+		AudioEngine::pause(audioId);
 }
 
 void OffenseScene::onConnect(SIOClient* c) {
@@ -248,6 +279,8 @@ void OffenseScene::onMouseUp(cocos2d::EventMouse *e) {
 	MainScene::onMouseUp(e);
 	mIsShoot = false;
 	isMouseDown = false;
+
+	pauseSound();
 }
 
 void OffenseScene::onMouseMove(cocos2d::EventMouse *e) {
@@ -303,8 +336,10 @@ void OffenseScene::shootFromCharacter()
 {
 	if (mIsShoot == true)
 	{
-		if (fireCool >= 0.01f)
+		if (fireCool >= 0.5f)
 		{
+			playSound();
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("explosion02.wav");
 			fireCool = 0;
 			addShootFire(mPtShoot);
 		}

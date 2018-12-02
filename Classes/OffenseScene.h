@@ -74,7 +74,15 @@ private:
 	float fireCool;
 
 	bool mIsShoot;
+
+	void playSound();
+	void preloadAll();
+	void uncacheAll();
+	void pauseSound();
 private:
+	float soundVolunm;
+	int audioId;
+
 	float coreHealth;
 	cocos2d::Sprite *hpBar_fill;
 	cocos2d::Sprite *hpBar_empty;
